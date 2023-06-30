@@ -1,0 +1,39 @@
+@import '@/shared/colors.scss';
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: $primary-light;
+
+  &::before,
+  &::after {
+    display: block;
+    width: 300px;
+    height: 500px;
+    position: absolute;
+    top: 10%;
+    left: 0;
+    content: '';
+    background: url('../../../public/images/backgrounds/Circles.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    z-index: 0;
+  }
+
+  &::after {
+    bottom: 10%;
+    right: 0;
+    left: unset;
+    top: unset;
+    transform: scaleX(-1);
+  }
+
+  > .logo {
+    width: 100%;
+    height: auto;
+    padding-top: 2%;
+    padding-left: 11%;
+    z-index: 1;
+  }
+}
