@@ -1,9 +1,7 @@
-
-
 import Image from 'next/image';
 import logo from '../../../public/images/logo/main_logo.svg';
 import styles from './page.module.scss';
-import { LoginForm } from '@/shared/ui/LoginForm/LoginForm';
+import { Form } from '@/shared/ui/Form/Form';
 
 export default function AuthPage() {
   return (
@@ -11,7 +9,14 @@ export default function AuthPage() {
       <div className={styles.logo}>
         <Image src={logo} alt="Beta-Quiz Logo" />
       </div>
-      <LoginForm />
+      <Form
+        title="Добро пожаловать!"
+        subtitle="Чтобы продолжить работу с системой Beta Quiz, необходимо
+          авторизоваться"
+        footerText="Еще нет аккаунта?"
+        linkText="Регистрация"
+        linkUrl="/register"
+      />
     </div>
   );
 }

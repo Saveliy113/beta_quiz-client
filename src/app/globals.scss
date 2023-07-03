@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap');
+@import '@/shared/colors.scss';
 
 * {
   box-sizing: border-box;
@@ -15,6 +16,19 @@ body {
 }
 
 a {
-  color: inherit;
+  color: $primary-800;
+  border-bottom: 1px solid $primary-800;
   text-decoration: none;
+  transition: all 0.1s ease-in;
+}
+
+a:hover {
+  color: $primary-dark;
+  border-bottom-color: $primary-dark;
+  transform: translateY(-1px);
+}
+
+.subtext {
+  font-size: 14px;
+  color: #979797;
 }
