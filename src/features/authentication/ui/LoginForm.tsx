@@ -1,12 +1,12 @@
 'use client';
 
+import { FC } from 'react';
 import { TextField } from '@mui/material';
-import { FC, ReactNode } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './LoginForm.module.scss';
 import { loginFormSchema } from '../model/loginFormSchema';
-import InputMask, { Props } from 'react-input-mask';
+import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 
 type Inputs = {
   phone: string;
@@ -36,7 +36,9 @@ const LoginForm: FC = () => {
         helperText={errors?.phone?.message}
         {...register('phone')}
       >
-        {(inputProps: Props) => <TextField disableUnderline {...inputProps} />}
+        {(inputProps: InputMaskProps) => (
+          <TextField disableUnderline {...inputProps} />
+        )}
       </InputMask>
       <TextField
         label="Пароль"
