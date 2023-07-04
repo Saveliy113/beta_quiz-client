@@ -1,11 +1,12 @@
 'use client';
 
 import { TextField } from '@mui/material';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './LoginForm.module.scss';
 import { loginFormSchema } from '../model/loginFormSchema';
+import InputMask, { Props } from 'react-input-mask';
 
 type Inputs = {
   phone: string;
@@ -18,15 +19,32 @@ const LoginForm: FC = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(loginFormSchema) });
+  } = useForm<Inputs>({
+    resolver: zodResolver(loginFormSchema),
+    mode: 'onChange',
+  });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   return (
     <form className={styles.loginForm}>
-      <TextField label="Телефон" {...register('phone')} />
-      <p>{errors.phone?.message}</p>
-      <TextField label="Пароль" type="password" {...register('password')} />
+      <InputMask
+        mask="+7(999)999-9999"
+        maskChar={null}
+        label="Телефон"
+        error={!!errors.phone}
+        helperText={errors?.phone?.message}
+        {...register('phone')}
+      >
+        {(inputProps: Props) => <TextField disableUnderline {...inputProps} />}
+      </InputMask>
+      <TextField
+        label="Пароль"
+        type="password"
+        error={!!errors?.password}
+        helperText={errors?.password?.message}
+        {...register('password')}
+      />
     </form>
   );
 };
