@@ -1,6 +1,6 @@
 import './globals.scss';
-import { ReactQueryProvider } from './layer/providers';
-import ThemeRegistry from './layer/providers/ui/ThemeRegistry';
+import { ReactQueryProvider } from '@/appLayer/providers/index';
+import { ThemeRegistry } from '@/appLayer/providers/index';
 
 export const metadata = {
   title: 'Beta-Quiz',
