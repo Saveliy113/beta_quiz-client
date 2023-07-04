@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import Link from 'next/link';
 import styles from './Form.module.scss';
 
@@ -8,6 +8,7 @@ type FormProps = {
   footerText?: string;
   linkText?: string;
   linkUrl?: string;
+  children: ReactNode;
 };
 
 export const Form: FC<FormProps> = ({
@@ -16,6 +17,7 @@ export const Form: FC<FormProps> = ({
   footerText,
   linkText,
   linkUrl,
+  children,
 }) => {
   return (
     <div className={styles.form__container}>
@@ -23,6 +25,8 @@ export const Form: FC<FormProps> = ({
         <h1>{title}</h1>
         <p className="subtext">{subtitle}</p>
       </div>
+
+      {children}
 
       {footerText || (linkText && linkUrl) ? (
         <div className={styles.form__footer}>
