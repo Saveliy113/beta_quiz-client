@@ -20,9 +20,7 @@ type Inputs = {
 
 const SignUpForm: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const phone = useAppSelector(
-    (state) => state.singUpReducer.value.clientPhone
-  );
+  const phone = useAppSelector((state) => state.signUp.value.clientPhone);
 
   const {
     register,
