@@ -1,7 +1,7 @@
 'use client';
 
-import { FC } from 'react';
-import { TextField } from '@mui/material';
+import { FC, ReactNode } from 'react';
+import { TextField, TextFieldProps } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styles from './LoginForm.module.scss';
@@ -36,9 +36,12 @@ const LoginForm: FC = () => {
         helperText={errors?.phone?.message}
         {...register('phone')}
       >
-        {(inputProps: InputMaskProps) => (
-          <TextField disableUnderline {...inputProps} />
-        )}
+        {
+          // @ts-ignore
+          (inputProps: InputMaskProps & TextFieldProps): ReactNode => (
+            <TextField {...inputProps} />
+          )
+        }
       </InputMask>
       <TextField
         label="Пароль"
