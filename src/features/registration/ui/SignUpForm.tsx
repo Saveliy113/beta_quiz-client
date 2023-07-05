@@ -1,34 +1,42 @@
 'use client';
 
 import { FC, ReactNode } from 'react';
-import { TextField, TextFieldProps } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { signUpFormSchema } from '../model/signUpFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import styles from './LoginForm.module.scss';
-import { loginFormSchema } from '../model/loginFormSchema';
+import { TextField, TextFieldProps } from '@mui/material';
+import styles from './SignUpForm.module.scss';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 
 type Inputs = {
+  domain: string;
   phone: string;
-  password: string;
 };
 
-const LoginForm: FC = () => {
+const SignUpForm: FC = () => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(signUpFormSchema),
     mode: 'onSubmit',
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   return (
-    <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
+    <form className={styles.signUpForm} onSubmit={handleSubmit(onSubmit)}>
+      <TextField
+        label="Домен"
+        type="text"
+        error={!!errors?.domain}
+        helperText={errors?.domain?.message}
+        {...register('domain')}
+      />
+
       <InputMask
         mask="+7(999)999-9999"
         maskChar={null}
@@ -44,21 +52,14 @@ const LoginForm: FC = () => {
           )
         }
       </InputMask>
-      <TextField
-        label="Пароль"
-        type="password"
-        error={!!errors?.password}
-        helperText={errors?.password?.message}
-        {...register('password')}
-      />
 
       <CustomButton
-        innerText="Войти"
+        innerText="Продолжить"
         onClick={() => {}}
-        disabled={!!errors.phone || !!errors.password}
+        disabled={!!errors.domain || !!errors.phone}
       />
     </form>
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

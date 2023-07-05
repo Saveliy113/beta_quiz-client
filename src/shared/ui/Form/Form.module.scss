@@ -4,8 +4,8 @@
   bottom: 0;
   right: 0;
   left: 0;
-  width: 500px;
-  height: 500px;
+  max-width: 500px;
+  height: fit-content;
   margin: auto;
   padding: 50px 40px;
   background-color: white;
@@ -17,9 +17,10 @@
   flex-direction: column;
 
   > .form__header {
+    margin-bottom: 50px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 5px;
   }
 
   > .form__footer {

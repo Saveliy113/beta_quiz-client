@@ -3,6 +3,8 @@
 .container {
   width: 100vw;
   height: 100vh;
+  padding-left: 20px;
+  padding-right: 20px;
   background-color: $primary-light;
 
   &::before,
@@ -14,7 +16,7 @@
     top: 10%;
     left: 0;
     content: '';
-    background: url('../../../public/images/backgrounds/Circles.png');
+    background: url('/images/backgrounds/Circles.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

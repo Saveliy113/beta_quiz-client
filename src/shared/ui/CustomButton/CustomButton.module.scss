@@ -1,0 +1,31 @@
+@import '@/shared/colors.scss';
+
+.customButton {
+  font-size: 24px;
+  font-weight: bold;
+  color: $primary-main;
+  height: 56px;
+  outline: none;
+  background: none;
+  border: 1px solid $primary-main;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+
+  &:hover {
+    background: $primary-main;
+    border: none;
+    color: $pure-white;
+  }
+
+  &:disabled {
+    cursor: auto;
+    color: rgba($primary-main, 0.3);
+    border-color: rgba($primary-main, 0.3);
+
+    &:hover {
+      background: none;
+      border: 1px solid rgba($primary-main, 0.3);
+    }
+  }
+}

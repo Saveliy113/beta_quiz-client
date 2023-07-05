@@ -1,4 +1,4 @@
-import LoginForm from '@/features/authentication/ui/LoginForm';
+import { LoginForm } from '@/features/authorization';
 import { Form } from '@/shared/ui/Form/Form';
 import React from 'react';
 
@@ -10,7 +10,7 @@ const Authorization = () => {
       авторизоваться"
       footerText="Еще нет аккаунта?"
       linkText="Регистрация"
-      linkUrl="/register"
+      linkUrl="/signup"
     >
       <LoginForm />
     </Form>
