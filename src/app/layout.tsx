@@ -1,6 +1,7 @@
 import './globals.scss';
 import { ReactQueryProvider } from '@/appLayer/providers/index';
 import { ThemeRegistry } from '@/appLayer/providers/index';
+import { ReduxProvider } from '@/appLayer/providers/redux/reduxProvider';
 
 export const metadata = {
   title: 'Beta-Quiz',
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ReactQueryProvider>
-          <ThemeRegistry>{children}</ThemeRegistry>
+          <ThemeRegistry>
+            <ReduxProvider>{children}</ReduxProvider>
+          </ThemeRegistry>
         </ReactQueryProvider>
       </body>
     </html>

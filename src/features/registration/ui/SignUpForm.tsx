@@ -8,6 +8,10 @@ import { TextField, TextFieldProps } from '@mui/material';
 import styles from './SignUpForm.module.scss';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
+import { setClientPhone } from '../model/signUp-Slice';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '@/appLayer/appStore';
+import { AppDispatch } from '@/appLayer/appStore';
 
 type Inputs = {
   domain: string;
@@ -15,6 +19,11 @@ type Inputs = {
 };
 
 const SignUpForm: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const phone = useAppSelector(
+    (state) => state.singUpReducer.value.clientPhone
+  );
+
   const {
     register,
     handleSubmit,
@@ -25,7 +34,10 @@ const SignUpForm: FC = () => {
     mode: 'onSubmit',
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data.phone);
+    dispatch(setClientPhone(data.phone));
+  };
 
   return (
     <form className={styles.signUpForm} onSubmit={handleSubmit(onSubmit)}>
@@ -52,6 +64,8 @@ const SignUpForm: FC = () => {
           )
         }
       </InputMask>
+
+      <p>Phone: {phone}</p>
 
       <CustomButton
         innerText="Продолжить"
