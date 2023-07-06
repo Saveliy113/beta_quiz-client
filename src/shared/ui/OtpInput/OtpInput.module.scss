@@ -2,33 +2,33 @@
 
 .otpContainer {
   display: flex;
+  // border: 1px solid black;
   justify-content: center;
   align-items: center;
   gap: 10px;
 
   & .otpInput {
-    width: 50px;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: $pure-white;
     border-radius: 10px;
     border: 1px solid #eee;
     outline: none;
     font-size: 30px;
-    width: 75px;
+    width: 75px !important;
     height: 80px;
     text-align: center;
     font-weight: 300;
     transition: all 0.1s ease-in;
 
     &:focus {
-      border: 1px solid blue !important;
+      background: $pure-white;
     }
 
     &:not(:focus) {
       background: $grey-200;
     }
 
-    &[class$='filled'] {
-      border: 3px solid green;
+    &:valid {
+      border: 2px solid $primary-main;
 
       &:not(:focus) {
         background: rgba(255, 255, 255, 0.6);

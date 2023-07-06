@@ -12,8 +12,8 @@ import { setClientPhone } from '../model/signUp-Slice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/appLayer/appStore';
 import { AppDispatch } from '@/appLayer/appStore';
-import OtpInput from '@/shared/ui/OtpInput/OtpInput';
-import SmsVerifyInput from '@/shared/ui/OtpInput/OtpInput';
+import OtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
+import SmsVerifyInput from '@/shared/ui/OtpInput/CustomOtpInput';
 
 type Inputs = {
   domain: string;
