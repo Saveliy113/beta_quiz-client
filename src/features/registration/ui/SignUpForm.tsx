@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUpFormSchema } from '../model/signUpFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,6 +12,8 @@ import { setClientPhone } from '../model/signUp-Slice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/appLayer/appStore';
 import { AppDispatch } from '@/appLayer/appStore';
+import OtpInput from '@/shared/ui/OtpInput/OtpInput';
+import SmsVerifyInput from '@/shared/ui/OtpInput/OtpInput';
 
 type Inputs = {
   domain: string;
@@ -21,6 +23,7 @@ type Inputs = {
 const SignUpForm: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const phone = useAppSelector((state) => state.signUp.value.clientPhone);
+  const [step, setStep] = useState<number>(1);
 
   const {
     register,
@@ -39,37 +42,41 @@ const SignUpForm: FC = () => {
 
   return (
     <form className={styles.signUpForm} onSubmit={handleSubmit(onSubmit)}>
-      <TextField
-        label="Домен"
-        type="text"
-        error={!!errors?.domain}
-        helperText={errors?.domain?.message}
-        {...register('domain')}
-      />
+      {step === 1 && (
+        <>
+          <TextField
+            label="Домен"
+            type="text"
+            error={!!errors?.domain}
+            helperText={errors?.domain?.message}
+            {...register('domain')}
+          />
 
-      <InputMask
-        mask="+7(999)999-9999"
-        maskChar={null}
-        label="Телефон"
-        error={!!errors.phone}
-        helperText={errors?.phone?.message}
-        {...register('phone')}
-      >
-        {
-          // @ts-ignore
-          (inputProps: InputMaskProps & TextFieldProps): ReactNode => (
-            <TextField {...inputProps} />
-          )
-        }
-      </InputMask>
+          <InputMask
+            mask="+7(999)999-9999"
+            maskChar={null}
+            label="Телефон"
+            error={!!errors.phone}
+            helperText={errors?.phone?.message}
+            {...register('phone')}
+          >
+            {
+              // @ts-ignore
+              (inputProps: InputMaskProps & TextFieldProps): ReactNode => (
+                <TextField {...inputProps} />
+              )
+            }
+          </InputMask>
 
-      <p>Phone: {phone}</p>
+          <CustomButton
+            innerText="Продолжить"
+            onClick={() => setStep(2)}
+            disabled={!!errors.domain || !!errors.phone}
+          />
+        </>
+      )}
 
-      <CustomButton
-        innerText="Продолжить"
-        onClick={() => {}}
-        disabled={!!errors.domain || !!errors.phone}
-      />
+      {step === 2 && <OtpInput />}
     </form>
   );
 };
