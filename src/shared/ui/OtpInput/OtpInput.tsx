@@ -12,27 +12,30 @@ const OtpInput: FC<Props> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    console.log(inputRef);
+    console.log(activeOtp);
 
     inputRef.current?.focus();
   }, [activeOtp]);
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    { target }: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    if (event.target.value) {
-      event.target.classList.add('filled');
-    } else event.target.classList.remove('filled');
+    const { value } = target;
+
+    if (!value) {
+      target.classList.remove('filled');
+      setActiveOtp(activeOtp - 1);
+    } else {
+      target.classList.add('filled');
+      setActiveOtp(activeOtp + 1);
+    }
 
     setOtp((oldOtp) => {
-      const newOtp = [...otp];
-      newOtp[index] = event.target.value.substring(
-        event.target.value.length - 1
-      );
+      const newOtp = [...oldOtp];
+      newOtp[index] = value.substring(value.length - 1);
       return newOtp;
     });
-    setActiveOtp(activeOtp + 1);
   };
   console.log(otp);
 
