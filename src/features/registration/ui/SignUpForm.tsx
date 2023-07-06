@@ -14,6 +14,7 @@ import { useAppSelector } from '@/appLayer/appStore';
 import { AppDispatch } from '@/appLayer/appStore';
 import OtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
 import SmsVerifyInput from '@/shared/ui/OtpInput/CustomOtpInput';
+import OtpVerify from '@/features/otpVerify/ui/OtpVerify';
 
 type Inputs = {
   domain: string;
@@ -76,7 +77,7 @@ const SignUpForm: FC = () => {
         </>
       )}
 
-      {step === 2 && <OtpInput />}
+      {step === 2 && <OtpVerify />}
     </form>
   );
 };
