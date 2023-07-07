@@ -1,0 +1,12 @@
+@import '@/shared/colors.module.scss';
+
+.customIconButton {
+  color: $secondary-main !important;
+  padding: 5px !important;
+  border-radius: 8px !important;
+  background-color: $secondary-200 !important;
+
+  &:hover {
+    background-color: darken($secondary-200, 3%) !important;
+  }
+}

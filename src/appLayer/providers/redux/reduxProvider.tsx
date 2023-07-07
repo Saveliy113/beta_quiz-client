@@ -1,7 +1,7 @@
 'use client';
 
-import { persistor, store } from '@/appLayer/appStore';
 import { ReactNode } from 'react';
+import { persistor, store } from '@/appLayer/appStore';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
