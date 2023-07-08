@@ -28,7 +28,7 @@
     }
 
     &:valid {
-      border: 2px solid $primary-main;
+      border: 2px solid $primary-200;
 
       &:not(:focus) {
         background: rgba(255, 255, 255, 0.6);

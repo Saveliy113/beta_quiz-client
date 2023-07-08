@@ -41,7 +41,7 @@ const OtpVerify = (props: Props) => {
       {!isLoading && send && (
         <>
           <CustomOtpInput />
-          <p className="subtext">
+          <p className="subtext" style={{ marginTop: 30 }}>
             Не пришел код? Отправить заново можно через ...
           </p>
           <CustomButton innerText="Подтвердить" onClick={() => {}} />
