@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, ReactNode, useState } from 'react';
+import { Dispatch, FC, ReactNode, SetStateAction, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUpFormSchema } from '../model/signUpFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,10 +21,13 @@ type Inputs = {
   phone: string;
 };
 
-const SignUpForm: FC = () => {
+interface SignUpFormProps {
+  goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
+}
+
+const SignUpForm: FC<SignUpFormProps> = ({ goNext }) => {
   const dispatch = useDispatch<AppDispatch>();
   const phone = useAppSelector((state) => state.signUp.value.clientPhone);
-  const [step, setStep] = useState<number>(1);
 
   const {
     register,
@@ -43,41 +46,37 @@ const SignUpForm: FC = () => {
 
   return (
     <form className={styles.signUpForm} onSubmit={handleSubmit(onSubmit)}>
-      {step === 1 && (
-        <>
-          <TextField
-            label="Домен"
-            type="text"
-            error={!!errors?.domain}
-            helperText={errors?.domain?.message}
-            {...register('domain')}
-          />
+      <>
+        <TextField
+          label="Домен"
+          type="text"
+          error={!!errors?.domain}
+          helperText={errors?.domain?.message}
+          {...register('domain')}
+        />
 
-          <InputMask
-            mask="+7(999)999-9999"
-            maskChar={null}
-            label="Телефон"
-            error={!!errors.phone}
-            helperText={errors?.phone?.message}
-            {...register('phone')}
-          >
-            {
-              // @ts-ignore
-              (inputProps: InputMaskProps & TextFieldProps): ReactNode => (
-                <TextField {...inputProps} />
-              )
-            }
-          </InputMask>
+        <InputMask
+          mask="+7(999)999-9999"
+          maskChar={null}
+          label="Телефон"
+          error={!!errors.phone}
+          helperText={errors?.phone?.message}
+          {...register('phone')}
+        >
+          {
+            // @ts-ignore
+            (inputProps: InputMaskProps & TextFieldProps): ReactNode => (
+              <TextField {...inputProps} />
+            )
+          }
+        </InputMask>
 
-          <CustomButton
-            innerText="Продолжить"
-            onClick={() => setStep(2)}
-            disabled={!!errors.domain || !!errors.phone}
-          />
-        </>
-      )}
-
-      {step === 2 && <OtpVerify />}
+        <CustomButton
+          innerText="Продолжить"
+          onClick={() => goNext(2)}
+          disabled={!!errors.domain || !!errors.phone}
+        />
+      </>
     </form>
   );
 };

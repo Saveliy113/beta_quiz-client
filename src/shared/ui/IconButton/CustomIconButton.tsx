@@ -3,7 +3,6 @@
 import { IconButton } from '@mui/material';
 import { FC } from 'react';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-import colors from '@/shared/colors.module.scss';
 import styles from './CustomIconButton.module.scss';
 
 interface IconButtonProps {}

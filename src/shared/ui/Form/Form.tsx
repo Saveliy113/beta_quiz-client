@@ -1,10 +1,11 @@
 import { FC, ReactNode } from 'react';
 import Link from 'next/link';
 import styles from './Form.module.scss';
+import Image from 'next/image';
 
 type FormProps = {
   title?: string;
-  subtitle?: string;
+  subtitle?: string | false;
   footerText?: string;
   linkText?: string;
   linkUrl?: string;
