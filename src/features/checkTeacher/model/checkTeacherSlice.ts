@@ -1,30 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type InitialState = {
-  value: CheckTeacherState;
+  domain: string;
+  phone: string;
 };
 
-type CheckTeacherState = {
-  clientPhone: string;
+const initialState: InitialState = {
+  domain: '',
+  phone: '',
 };
-
-const initialState = {
-  value: {
-    clientPhone: '',
-  } as CheckTeacherState,
-} as InitialState;
 
 export const checkTeacherSlice = createSlice({
   name: 'checkTeacher',
   initialState,
   reducers: {
-    setClientPhone: (state, action: PayloadAction<string>) => {
-      state.value = {
-        clientPhone: action.payload,
-      };
+    setClientInfo: (state, action: PayloadAction<InitialState>) => {
+      console.log(action.payload);
+      state.phone = action.payload.phone;
+      state.domain = action.payload.domain;
     },
   },
 });
 
-export const { setClientPhone } = checkTeacherSlice.actions;
+export const { setClientInfo } = checkTeacherSlice.actions;
 export default checkTeacherSlice.reducer;

@@ -3,8 +3,8 @@ import { z } from 'zod';
 export const loginFormSchema = z.object({
   phone: z
     .string()
-    .min(15, 'Введите телефон полностью')
-    .nonempty('Обязательное поле'),
+    .nonempty('Обязательное поле')
+    .min(15, 'Введите телефон полностью'),
   password: z
     .string()
     .nonempty('Обязательное поле')

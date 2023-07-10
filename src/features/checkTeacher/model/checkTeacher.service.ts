@@ -1,8 +1,8 @@
 import { $axios } from '@/shared/api';
 
-type CheckTeacherDto = {
+export type CheckTeacherDto = {
   domain: string;
-  phoneNumber: string;
+  phone_number: string;
 };
 
 type SendOtpDto = {
@@ -16,7 +16,7 @@ type CheckOtpDto = {
 
 class SignUpApi {
   async checkTeacher(dto: CheckTeacherDto) {
-    return $axios.post('/teachers/check_teacher_alfa/', dto);
+    return $axios.post('/teachers/check_teacher_alfa', dto);
   }
 }
 

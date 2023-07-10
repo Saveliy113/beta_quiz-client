@@ -1,17 +1,21 @@
 'use client';
 
-import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import { Dispatch, FC, ReactNode, SetStateAction, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { checkTeacherFormSchema } from '../model/checkTeacherFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, TextFieldProps } from '@mui/material';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import { setClientPhone } from '../model/checkTeacherSlice';
+import { setClientInfo } from '../model/checkTeacherSlice';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '@/appLayer/appStore';
+import { useAppDispatch, useAppSelector } from '@/appLayer/appStore';
 import { AppDispatch } from '@/appLayer/appStore';
 import styles from './CheckTeacherForm.module.scss';
+import toast from 'react-hot-toast';
+import { useMutation } from '@tanstack/react-query';
+import SignUpService, { CheckTeacherDto } from '../model/checkTeacher.service';
+import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
 
 type Inputs = {
   domain: string;
@@ -23,8 +27,9 @@ interface CheckTeacherFormProps {
 }
 
 const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const phone = useAppSelector((state) => state.signUp.value.clientPhone);
+  const dispatch = useAppDispatch();
+  const clientInfo = useAppSelector((state) => state.signUp);
+  console.log(clientInfo);
 
   const {
     register,
@@ -36,9 +41,27 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
     mode: 'onSubmit',
   });
 
+  const { isLoading, isError, isSuccess, error, mutate } = useMutation(
+    ['checkTeacher'],
+    (body: CheckTeacherDto) => SignUpService.checkTeacher(body)
+  );
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data.phone);
-    dispatch(setClientPhone(data.phone));
+    mutate(
+      {
+        domain: data.domain,
+        phone_number: data.phone,
+      },
+      {
+        onSuccess: () => {
+          dispatch(setClientInfo(data));
+          goNext(2);
+        },
+        onError(error, variables, context) {
+          toast.error(error.response.data.message);
+        },
+      }
+    );
   };
 
   return (
@@ -47,15 +70,17 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
         <TextField
           label="Домен"
           type="text"
+          fullWidth
           error={!!errors?.domain}
           helperText={errors?.domain?.message}
           {...register('domain')}
         />
 
         <InputMask
-          mask="+7(999)999-9999"
+          mask="+7(999)999-99-99"
           maskChar={null}
           label="Телефон"
+          fullWidth
           error={!!errors.phone}
           helperText={errors?.phone?.message}
           {...register('phone')}
@@ -68,11 +93,19 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
           }
         </InputMask>
 
-        <CustomButton
-          innerText="Продолжить"
-          onClick={() => goNext(2)}
-          disabled={!!errors.domain || !!errors.phone}
-        />
+        {isLoading ? (
+          <DotsLoader />
+        ) : (
+          <CustomButton
+            innerText="Продолжить"
+            onClick={() => {}}
+            // onClick={() => {
+            //   toast.success('Teacher is in a database');
+            //   goNext(2);
+            // }}
+            disabled={!!errors.domain || !!errors.phone}
+          />
+        )}
       </>
     </form>
   );
