@@ -1,31 +1,28 @@
 'use client';
 
-import { Dispatch, FC, ReactNode, SetStateAction, useState } from 'react';
+import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { signUpFormSchema } from '../model/signUpFormSchema';
+import { checkTeacherFormSchema } from '../model/checkTeacherFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, TextFieldProps } from '@mui/material';
-import styles from './SignUpForm.module.scss';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import { setClientPhone } from '../model/signUp-Slice';
+import { setClientPhone } from '../model/checkTeacherSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/appLayer/appStore';
 import { AppDispatch } from '@/appLayer/appStore';
-import OtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
-import SmsVerifyInput from '@/shared/ui/OtpInput/CustomOtpInput';
-import OtpVerify from '@/features/otpVerify/ui/OtpVerify';
+import styles from './CheckTeacherForm.module.scss';
 
 type Inputs = {
   domain: string;
   phone: string;
 };
 
-interface SignUpFormProps {
+interface CheckTeacherFormProps {
   goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
 }
 
-const SignUpForm: FC<SignUpFormProps> = ({ goNext }) => {
+const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   const dispatch = useDispatch<AppDispatch>();
   const phone = useAppSelector((state) => state.signUp.value.clientPhone);
 
@@ -35,7 +32,7 @@ const SignUpForm: FC<SignUpFormProps> = ({ goNext }) => {
     watch,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: zodResolver(signUpFormSchema),
+    resolver: zodResolver(checkTeacherFormSchema),
     mode: 'onSubmit',
   });
 
@@ -81,4 +78,4 @@ const SignUpForm: FC<SignUpFormProps> = ({ goNext }) => {
   );
 };
 
-export default SignUpForm;
+export default CheckTeacherForm;

@@ -1,9 +1,10 @@
 'use client';
 
 import { Form } from '@/shared/ui/Form/Form';
-import { SignUpForm } from '@/features/registration';
+import { CheckTeacherForm } from '@/features/checkTeacher';
 import { useState } from 'react';
 import OtpVerify from '@/features/otpVerify/ui/OtpVerify';
+import CreatePasswordForm from '@/features/createPassword/ui/CreatePasswordForm';
 
 const Registration = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -24,10 +25,11 @@ const Registration = () => {
       }
       footerText={step === 1 ? 'Уже есть аккаунт?' : ''}
       linkText="Войти"
-      linkUrl={step === 1 ? "/signin" : ''}
+      linkUrl={step === 1 ? '/signin' : ''}
     >
-      {step === 1 && <SignUpForm goNext={setStep} />}
-      {step === 2 && <OtpVerify />}
+      {step === 1 && <CheckTeacherForm goNext={setStep} />}
+      {step === 2 && <OtpVerify goNext={setStep} />}
+      {step === 3 && <CreatePasswordForm />}
     </Form>
   );
 };

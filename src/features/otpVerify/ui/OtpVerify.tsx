@@ -3,14 +3,16 @@
 import { Form } from '@/shared/ui/Form/Form';
 import CustomOtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import styles from './OtpVerify.module.scss';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
 
-type Props = {};
+type OtpVerifyProps = {
+  goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
+};
 
-const OtpVerify = (props: Props) => {
+const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [send, setIsSend] = useState(false);
 
@@ -19,7 +21,7 @@ const OtpVerify = (props: Props) => {
     setTimeout(() => {
       setIsLoading(false);
       setIsSend(true);
-    }, 5000);
+    }, 2000);
   };
 
   return (
@@ -44,7 +46,7 @@ const OtpVerify = (props: Props) => {
           <p className="subtext" style={{ marginTop: 30 }}>
             Не пришел код? Отправить заново можно через ...
           </p>
-          <CustomButton innerText="Подтвердить" onClick={() => {}} />
+          <CustomButton innerText="Подтвердить" onClick={() => goNext(3)} />
         </>
       )}
     </div>

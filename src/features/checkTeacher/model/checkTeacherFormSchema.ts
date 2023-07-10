@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const signUpFormSchema = z.object({
+export const checkTeacherFormSchema = z.object({
   domain: z
     .string()
     .min(1, 'Обязательное поле')

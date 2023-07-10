@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type InitialState = {
-  value: SignUpState;
+  value: CheckTeacherState;
 };
 
-type SignUpState = {
+type CheckTeacherState = {
   clientPhone: string;
 };
 
 const initialState = {
   value: {
     clientPhone: '',
-  } as SignUpState,
+  } as CheckTeacherState,
 } as InitialState;
 
-export const signUpSlice = createSlice({
-  name: 'signUp',
+export const checkTeacherSlice = createSlice({
+  name: 'checkTeacher',
   initialState,
   reducers: {
     setClientPhone: (state, action: PayloadAction<string>) => {
@@ -26,5 +26,5 @@ export const signUpSlice = createSlice({
   },
 });
 
-export const { setClientPhone } = signUpSlice.actions;
-export default signUpSlice.reducer;
+export const { setClientPhone } = checkTeacherSlice.actions;
+export default checkTeacherSlice.reducer;
