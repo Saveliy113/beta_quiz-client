@@ -14,6 +14,8 @@ import styles from './OtpVerify.module.scss';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
 import useNotify from '@/shared/hooks/useNotify';
+import { motion, AnimatePresence } from 'framer-motion';
+import { formatTimer } from '@/shared/lib/formatTimer';
 
 type OtpVerifyProps = {
   goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
@@ -22,7 +24,8 @@ type OtpVerifyProps = {
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [send, setIsSend] = useState(false);
-  const [timer, setTimer] = useState<number>(59000);
+  const [timer, setTimer] = useState<number>(3000);
+  const [isSuccess, setIsSuccess] = useState(false);
   const { notify } = useNotify();
 
   const onClickHandler = () => {
@@ -47,13 +50,63 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
 
   return (
     <div className={styles.otp__container}>
-      <Image
-        src="/icons/shield.svg"
-        alt="Form header icon"
-        style={{ objectFit: 'contain' }}
-        width={100}
-        height={100}
-      />
+      <AnimatePresence>
+        {!isSuccess && (
+          <motion.div
+            initial={false}
+            animate="animateState"
+            exit="exitState"
+            transition={{ duration: 0.4 }}
+            variants={{
+              animateState: {
+                opacity: 1,
+                position: 'static',
+              },
+              exitState: {
+                opacity: 0,
+                rotate: 180,
+                position: 'absolute',
+              },
+            }}
+          >
+            <Image
+              src="/icons/shield.svg"
+              alt="Form header icon"
+              style={{ objectFit: 'contain' }}
+              width={100}
+              height={100}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {isSuccess && (
+        <motion.div
+          initial="initialState"
+          animate="animateState"
+          transition={{ duration: 0.75 }}
+          variants={{
+            initialState: {
+              rotate: 180,
+              position: 'absolute',
+              opacity: 0,
+            },
+            animateState: {
+              opacity: 1,
+              rotate: 360,
+              position: 'static',
+            },
+          }}
+        >
+          <Image
+            src="/icons/otp_success.svg"
+            alt="Form header icon"
+            style={{ objectFit: 'contain' }}
+            width={100}
+            height={100}
+          />
+        </motion.div>
+      )}
 
       {isLoading && <DotsLoader />}
 
@@ -70,11 +123,16 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
             <p className="subtext" style={{ marginTop: 30 }}>
               Не пришел код? Отправить заново можно через{' '}
               <span style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                {timer / 1000}
+                {formatTimer(timer)}
               </span>
             </p>
           )}
+
           <CustomButton innerText="Подтвердить" onClick={() => goNext(3)} />
+
+          <button onClick={() => setIsSuccess((isSuccess) => !isSuccess)}>
+            SetSuccess
+          </button>
         </>
       )}
     </div>
