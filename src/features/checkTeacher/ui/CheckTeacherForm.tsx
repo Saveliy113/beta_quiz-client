@@ -47,21 +47,21 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   );
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    // mutate(
-    //   {
-    //     domain: data.domain,
-    //     phone_number: data.phone,
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       dispatch(setClientInfo(data));
-    //       goNext(2);
-    //     },
-    //     onError(error) {
-    //       toast.error(error.response.data.message);
-    //     },
-    //   }
-    // );
+    mutate(
+      {
+        domain: data.domain,
+        phone_number: data.phone,
+      },
+      {
+        onSuccess: () => {
+          dispatch(setClientInfo(data));
+          goNext(2);
+        },
+        onError: (error) => {
+          toast.error(error.response.data.message);
+        },
+      }
+    );
   };
 
   return (
@@ -98,7 +98,7 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
         ) : (
           <CustomButton
             innerText="Продолжить"
-            onClick={() => goNext(2)}
+            onClick={() => {}}
             // onClick={() => {
             //   toast.success('Teacher is in a database');
             //   goNext(2);

@@ -16,29 +16,49 @@ import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
 import useNotify from '@/shared/hooks/useNotify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatTimer } from '@/shared/lib/formatTimer';
+import { useMutation } from '@tanstack/react-query';
+import OtpService, {
+  CheckOtpDto,
+  SendOtpDto,
+} from '../model/otpVerify.service';
+import { useAppSelector } from '@/appLayer/appStore';
 
 type OtpVerifyProps = {
   goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
 };
 
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [send, setIsSend] = useState(false);
   const [timer, setTimer] = useState<number>(59000);
-  const [isSuccess, setIsSuccess] = useState(false);
   const { notify } = useNotify();
 
-  const onClickHandler = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSend(true);
-    }, 2000);
+  const {
+    isSuccess: sendOtpIsSuccess,
+    isLoading: sendOtpIsLoading,
+    isError: sendOtpIsError,
+    error: sendOtpError,
+    mutate: sendOtp,
+  } = useMutation(['sendOtp'], (body: SendOtpDto) => OtpService.sendOtp(body));
+
+  const {
+    isSuccess: checkOtpIsSuccess,
+    isLoading: checkOtpIsLoading,
+    isError: checkOtpIsError,
+    error: checkOtpError,
+    mutate: checkOtp,
+  } = useMutation(['checkOtp'], (body: CheckOtpDto) =>
+    OtpService.verifyOtp(body)
+  );
+
+  const clientPhone = useAppSelector((state) => state.signUp.phone);
+  console.log('Client phone: ', clientPhone);
+  const sendOtpHandler = () => {
+    sendOtp({ phone: '+' + clientPhone.replace(/\D/g, '') });
   };
+  const checkOtpHandler = () => {};
 
   useEffect(() => {
     let timerId: any;
-    if (send) {
+    if (sendOtpIsSuccess) {
       timerId = setInterval(() => setTimer((timer) => timer - 1000), 1000);
     }
     if (timer === 0) {
@@ -46,12 +66,12 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
     }
 
     return () => clearInterval(timerId);
-  }, [send, timer]);
+  }, [sendOtpIsSuccess, timer]);
 
   return (
     <div className={styles.otp__container}>
       <AnimatePresence>
-        {!isSuccess && (
+        {!checkOtpIsSuccess && (
           <motion.div
             initial={false}
             animate="animateState"
@@ -80,7 +100,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
         )}
       </AnimatePresence>
 
-      {isSuccess && (
+      {checkOtpIsSuccess && (
         <motion.div
           initial="initialState"
           animate="animateState"
@@ -108,31 +128,37 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
         </motion.div>
       )}
 
-      {isLoading && <DotsLoader />}
-
-      {!isLoading && !send && (
-        <CustomButton innerText="Отправить код" onClick={onClickHandler} />
+      {!sendOtpIsLoading && !sendOtpIsSuccess && (
+        <CustomButton innerText="Отправить код" onClick={sendOtpHandler} />
       )}
 
-      {!isLoading && send && (
+      {!sendOtpIsLoading && sendOtpIsSuccess && (
         <>
           <CustomOtpInput />
           {timer === 0 ? (
-            <button onClick={() => setTimer(500000)}>Отправить заново</button>
+            <button onClick={() => setTimer(300000)}>Отправить заново</button>
           ) : (
-            <p className="subtext" style={{ marginTop: 30 }}>
-              Не пришел код? Отправить заново можно через{' '}
+            <p
+              className="subtext"
+              style={{
+                marginTop: 30,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+              }}
+            >
+              Не пришел код? Отправить заново через{'  '}
               <span style={{ fontSize: '20px', fontWeight: 'bold' }}>
                 {formatTimer(timer)}
               </span>
             </p>
           )}
 
-          <CustomButton innerText="Подтвердить" onClick={() => goNext(3)} />
+          {sendOtpIsLoading || (checkOtpIsLoading && <DotsLoader />)}
 
-          <button onClick={() => setIsSuccess((isSuccess) => !isSuccess)}>
-            SetSuccess
-          </button>
+          {!checkOtpIsLoading && !checkOtpIsSuccess && (
+            <CustomButton innerText="Подтвердить" onClick={() => goNext(3)} />
+          )}
         </>
       )}
     </div>
