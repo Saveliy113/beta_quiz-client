@@ -24,7 +24,7 @@ type OtpVerifyProps = {
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [send, setIsSend] = useState(false);
-  const [timer, setTimer] = useState<number>(3000);
+  const [timer, setTimer] = useState<number>(59000);
   const [isSuccess, setIsSuccess] = useState(false);
   const { notify } = useNotify();
 
