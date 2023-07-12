@@ -4,7 +4,7 @@ import { Form } from '@/shared/ui/Form/Form';
 import { CheckTeacherForm } from '@/features/checkTeacher';
 import { useState } from 'react';
 import OtpVerify from '@/features/otpVerify/ui/OtpVerify';
-import CreatePasswordForm from '@/features/createPassword/ui/CreatePasswordForm';
+import CreatePasswordForm from '@/features/signUp/ui/CreatePasswordForm';
 
 const Registration = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);

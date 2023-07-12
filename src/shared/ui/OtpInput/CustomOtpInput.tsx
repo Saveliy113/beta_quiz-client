@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import styles from './OtpInput.module.scss';
 import OtpInput from 'react-otp-input';
 import clsx from 'clsx';
 
-type Props = {};
+type CustomOtpInputProps = {
+  otp: string;
+  setOtp: Dispatch<SetStateAction<string>>;
+};
 
-const CustomOtpInput = (props: Props) => {
-  const [otp, setOtp] = useState('');
-
+const CustomOtpInput: FC<CustomOtpInputProps> = ({ otp, setOtp }) => {
   const inputStyles = clsx(styles.otpInput, otp[0] && 'filled_1');
 
   return (

@@ -22,14 +22,21 @@ import OtpService, {
   SendOtpDto,
 } from '../model/otpVerify.service';
 import { useAppSelector } from '@/appLayer/appStore';
+import { useRouter } from 'next/navigation';
 
 type OtpVerifyProps = {
   goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
 };
 
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
-  const [timer, setTimer] = useState<number>(59000);
+  const [timer, setTimer] = useState<number>(3000);
+  const [otp, setOtp] = useState('');
+  const [attempt, setAttempt] = useState<number>(0);
+  const clientPhone = useAppSelector((state) => state.signUp.phone);
   const { notify } = useNotify();
+  const router = useRouter();
+
+  //------------------------------Queries------------------------------//
 
   const {
     isSuccess: sendOtpIsSuccess,
@@ -37,7 +44,14 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
     isError: sendOtpIsError,
     error: sendOtpError,
     mutate: sendOtp,
-  } = useMutation(['sendOtp'], (body: SendOtpDto) => OtpService.sendOtp(body));
+  } = useMutation(['sendOtp'], (body: SendOtpDto) => OtpService.sendOtp(body), {
+    onSuccess: () => {
+      setAttempt((prev) => prev + 1);
+    },
+    onError: (error) => {
+      notify({ error: true, message: error.response.data.message });
+    },
+  });
 
   const {
     isSuccess: checkOtpIsSuccess,
@@ -45,16 +59,40 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
     isError: checkOtpIsError,
     error: checkOtpError,
     mutate: checkOtp,
-  } = useMutation(['checkOtp'], (body: CheckOtpDto) =>
-    OtpService.verifyOtp(body)
+  } = useMutation(
+    ['checkOtp'],
+    (body: CheckOtpDto) => OtpService.verifyOtp(body),
+    {
+      onSuccess: () => {
+        setTimeout(() => goNext(3), 1000);
+      },
+      onError: (error) => {
+        notify({ error: true, message: error.response.data.message });
+      },
+    }
   );
 
-  const clientPhone = useAppSelector((state) => state.signUp.phone);
-  console.log('Client phone: ', clientPhone);
+  //--------------------------------------------------------------------//
+
+  //------------------------------Handlers------------------------------//
   const sendOtpHandler = () => {
     sendOtp({ phone: '+' + clientPhone.replace(/\D/g, '') });
   };
-  const checkOtpHandler = () => {};
+
+  const checkOtpHandler = () => {
+    checkOtp({ otp: otp, phone: '+' + clientPhone.replace(/\D/g, '') });
+  };
+
+  const timerButtonHandler = () => {
+    if (attempt >= 3) {
+      notify({ error: true, message: 'Попробуйте пройти регистрацию заново' });
+      setTimeout(() => location.reload(), 2000);
+      return;
+    }
+    setTimer(3000);
+    sendOtpHandler();
+  };
+  //--------------------------------------------------------------------//
 
   useEffect(() => {
     let timerId: any;
@@ -67,6 +105,11 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
 
     return () => clearInterval(timerId);
   }, [sendOtpIsSuccess, timer]);
+  console.log('ATTEMPT: ', attempt);
+
+  //--------------------------------------------------------------------//
+
+  //------------------------------Component------------------------------//
 
   return (
     <div className={styles.otp__container}>
@@ -76,7 +119,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
             initial={false}
             animate="animateState"
             exit="exitState"
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.2 }}
             variants={{
               animateState: {
                 opacity: 1,
@@ -104,7 +147,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
         <motion.div
           initial="initialState"
           animate="animateState"
-          transition={{ duration: 0.75 }}
+          transition={{ duration: 0.55 }}
           variants={{
             initialState: {
               rotate: 180,
@@ -128,20 +171,24 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
         </motion.div>
       )}
 
-      {!sendOtpIsLoading && !sendOtpIsSuccess && (
+      {!sendOtpIsLoading && !sendOtpIsSuccess && attempt < 1 && (
         <CustomButton innerText="Отправить код" onClick={sendOtpHandler} />
       )}
 
-      {!sendOtpIsLoading && sendOtpIsSuccess && (
+      {sendOtpIsLoading && attempt < 1 && <DotsLoader />}
+
+      {attempt > 0 && (
         <>
-          <CustomOtpInput />
-          {timer === 0 ? (
-            <button onClick={() => setTimer(300000)}>Отправить заново</button>
+          <CustomOtpInput otp={otp} setOtp={setOtp} />
+
+          {timer === 0 && attempt <= 3 ? (
+            <button onClick={timerButtonHandler} className="buttonLink">
+              Отправить заново
+            </button>
           ) : (
             <p
               className="subtext"
               style={{
-                marginTop: 30,
                 display: 'flex',
                 alignItems: 'center',
                 gap: 5,
@@ -154,10 +201,14 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
             </p>
           )}
 
-          {sendOtpIsLoading || (checkOtpIsLoading && <DotsLoader />)}
-
-          {!checkOtpIsLoading && !checkOtpIsSuccess && (
-            <CustomButton innerText="Подтвердить" onClick={() => goNext(3)} />
+          {checkOtpIsLoading ? (
+            <DotsLoader />
+          ) : (
+            <CustomButton
+              innerText="Подтвердить"
+              onClick={checkOtpHandler}
+              disabled={checkOtpIsLoading || checkOtpIsSuccess}
+            />
           )}
         </>
       )}

@@ -32,3 +32,20 @@ a:hover {
   font-size: 14px;
   color: #979797;
 }
+
+.buttonLink {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: $primary-800;
+  border-bottom: 1px solid $primary-800;
+  transition: all 0.1s ease-in;
+
+  &:hover {
+    color: $primary-dark;
+    border-bottom-color: $primary-dark;
+    transform: translateY(-1px);
+  }
+}

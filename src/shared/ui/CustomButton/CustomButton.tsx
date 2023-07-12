@@ -19,7 +19,7 @@ const CustomButton: FC<CustomButtonProps> = ({
     <button
       onClick={onClick}
       className={styles.customButton}
-      // disabled={disabled || isLoading}
+      disabled={disabled || isLoading}
       // disabled
     >
       {innerText}
