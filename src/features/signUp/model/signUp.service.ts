@@ -1,12 +1,11 @@
 import { $axios } from '@/shared/api';
+import { CheckTeacherDto, CreateTeacherDto } from './types';
 
-export type CreateTeacherDto = {
-  domain: string;
-  phone: string;
-  password: string;
-};
+class SignUpApi {
+  async checkTeacher(dto: CheckTeacherDto) {
+    return $axios.post('/teachers/check_teacher_alfa', dto);
+  }
 
-class CreatePasswordApi {
   async createTeacher(dto: CreateTeacherDto) {
     return $axios.post<CreateTeacherDto, CreateTeacherDto>(
       '/teachers/teacher/',
@@ -19,6 +18,6 @@ class CreatePasswordApi {
   }
 }
 
-const CreatePasswordService = new CreatePasswordApi();
+const SignUpService = new SignUpApi();
 
-export default CreatePasswordService;
+export default SignUpService;

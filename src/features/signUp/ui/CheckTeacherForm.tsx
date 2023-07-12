@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, FC, ReactNode, SetStateAction, useEffect } from 'react';
+import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { checkTeacherFormSchema } from '../model/checkTeacherFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,46 +8,37 @@ import { TextField, TextFieldProps } from '@mui/material';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import { setClientInfo } from '../model/checkTeacherSlice';
-import { useDispatch } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '@/appLayer/appStore';
-import { AppDispatch } from '@/appLayer/appStore';
 import styles from './CheckTeacherForm.module.scss';
 import toast from 'react-hot-toast';
 import { useMutation } from '@tanstack/react-query';
-import SignUpService, { CheckTeacherDto } from '../model/checkTeacher.service';
+import SignUpService from '../model/signUp.service';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
-
-type Inputs = {
-  domain: string;
-  phone: string;
-};
-
-interface CheckTeacherFormProps {
-  goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
-}
+import {
+  CheckTeacherDto,
+  CheckTeacherFormProps,
+  CheckTeacherInputs,
+} from '../model/types';
 
 const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   const dispatch = useAppDispatch();
-  const clientInfo = useAppSelector((state) => state.signUp);
-  console.log(clientInfo);
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<CheckTeacherInputs>({
     resolver: zodResolver(checkTeacherFormSchema),
     mode: 'onSubmit',
   });
 
-  const { isLoading, isError, isSuccess, error, mutate } = useMutation(
+  const { isLoading, mutate: checkTeacher } = useMutation(
     ['checkTeacher'],
     (body: CheckTeacherDto) => SignUpService.checkTeacher(body)
   );
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    mutate(
+  const onSubmit: SubmitHandler<CheckTeacherInputs> = (data) => {
+    checkTeacher(
       {
         domain: data.domain,
         phone_number: data.phone,

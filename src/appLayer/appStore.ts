@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
-import checkTeacherReducer from '@/features/checkTeacher/model/checkTeacherSlice';
+import checkTeacherReducer from '@/features/signUp/model/checkTeacherSlice';
 
 //REDUX PERSIST
 import {
