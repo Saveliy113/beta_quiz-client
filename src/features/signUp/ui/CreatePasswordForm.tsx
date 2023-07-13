@@ -41,10 +41,9 @@ const CreatePasswordForm: FC = () => {
       onSuccess: () => {
         notify({
           success: true,
-          message:
-            'Вы успешно зарегистрированы. Сейчас вы будете перенаправлены на страницу авторизации',
+          message: 'Вы успешно зарегистрированы!',
         });
-        setTimeout(() => router.push('/signin'), 2000);
+        setTimeout(() => router.push('/signin'), 1000);
       },
       onError: (error: AxiosError<{ message: string }>) => {
         if (error.response) {
@@ -57,13 +56,7 @@ const CreatePasswordForm: FC = () => {
   );
 
   const onSubmit: SubmitHandler<CreatePasswordInputs> = ({ password }) => {
-    // createTeacher({ domain, phone, password });
-    console.log({ domain, phone, password });
-    notify({
-      success: true,
-      message: 'Вы успешно зарегистрированы!',
-    });
-    setTimeout(() => router.push('/signin'), 2000);
+    createTeacher({ domain, phone, password });
   };
 
   return (

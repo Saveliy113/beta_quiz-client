@@ -21,10 +21,12 @@ import { AxiosError } from 'axios';
 import { CheckOtpDto, OtpVerifyProps, SendOtpDto } from '../model/types';
 import OtpService from '../model/otpVerify.service';
 import { useKeyPress } from 'ahooks';
+import { useRouter } from 'next/navigation';
 
-const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
+const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
   const { notify } = useNotify();
-  const [timer, setTimer] = useState<number>(3000);
+  const router = useRouter();
+  const [timer, setTimer] = useState<number>(59000);
   const [attempt, setAttempt] = useState<number>(0);
 
   const [otp, setOtp] = useState('');
@@ -58,7 +60,12 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
     (body: CheckOtpDto) => OtpService.verifyOtp(body),
     {
       onSuccess: () => {
-        setTimeout(() => goNext(3), 1000);
+        setTimeout(() => {
+          if (redirect) {
+            router.push(redirect);
+          }
+          goNext(3);
+        }, 1000);
       },
       onError: (error: AxiosError<{ message: string }>) => {
         if (error.response) {
@@ -95,7 +102,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
       setTimeout(() => location.reload(), 2000);
       return;
     }
-    setTimer(3000); //Can Change waiting time
+    setTimer(300000);
     sendOtpHandler();
   };
   //--------------------------------------------------------------------//

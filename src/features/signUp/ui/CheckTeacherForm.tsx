@@ -20,8 +20,6 @@ import {
   CheckTeacherInputs,
 } from '../model/types';
 import { AxiosError } from 'axios';
-import { useKeyDown } from '@/shared/hooks/useKeyDown';
-import { useKeyPress } from 'ahooks';
 
 const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   const dispatch = useAppDispatch();
