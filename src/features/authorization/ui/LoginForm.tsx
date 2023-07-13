@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,7 +8,6 @@ import styles from './LoginForm.module.scss';
 import { loginFormSchema } from '../model/loginFormSchema';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import { OtpVerify } from '@/features/otpVerify';
 import { useMutation } from '@tanstack/react-query';
 import SignInService from '../model/signIn.service';
 import { LoginDto, LoginFormInputs } from '../model/types';
@@ -16,6 +15,13 @@ import { AxiosError } from 'axios';
 import useNotify from '@/shared/hooks/useNotify';
 import { useRouter } from 'next/navigation';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
+import Cookies from 'js-cookie';
+
+type LoginResponse = {
+  data: {
+    auth_token: string;
+  };
+};
 
 const LoginForm: FC = () => {
   const { notify } = useNotify();
@@ -34,11 +40,16 @@ const LoginForm: FC = () => {
     ['signIn'],
     (dto: LoginDto) => SignInService.login(dto),
     {
-      onSuccess: () => router.push('/lessons'),
+      onSuccess: ({ data }) => {
+        console.log(data);
+        Cookies.set('_auth', data.auth_token);
+        router.push('/lessons');
+      },
       onError: (error: AxiosError<{ message: string }>) => {
-        if (error.response) {
+        if (error.response?.data.message) {
           notify({ error: true, message: error.response.data.message });
-        }
+        } else
+          notify({ error: true, message: 'Возникла ошибка при авторизации' });
       },
     }
   );

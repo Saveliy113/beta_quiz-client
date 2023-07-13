@@ -4,7 +4,7 @@ import styles from './Sidebar.module.scss';
 interface SidebarProps {}
 
 const Sidebar: FC<SidebarProps> = ({}) => {
-  return <div>Sidebar</div>;
+  return <div className={styles.sidebar}></div>;
 };
 
 export default Sidebar;
