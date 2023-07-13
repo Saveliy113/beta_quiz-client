@@ -1,6 +1,5 @@
 'use client';
 
-import { Form } from '@/shared/ui/Form/Form';
 import CustomOtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
 import Image from 'next/image';
 import React, {
@@ -22,42 +21,42 @@ import OtpService, {
   SendOtpDto,
 } from '../model/otpVerify.service';
 import { useAppSelector } from '@/appLayer/appStore';
-import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 
 type OtpVerifyProps = {
   goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
 };
 
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
-  const [timer, setTimer] = useState<number>(3000);
-  const [otp, setOtp] = useState('');
-  const [attempt, setAttempt] = useState<number>(0);
-  const clientPhone = useAppSelector((state) => state.signUp.phone);
   const { notify } = useNotify();
-  const router = useRouter();
+  const [timer, setTimer] = useState<number>(59000);
+  const [attempt, setAttempt] = useState<number>(0);
+
+  const [otp, setOtp] = useState('');
+  const clientPhone = useAppSelector((state) => state.signUp.phone);
 
   //------------------------------Queries------------------------------//
 
   const {
     isSuccess: sendOtpIsSuccess,
     isLoading: sendOtpIsLoading,
-    isError: sendOtpIsError,
-    error: sendOtpError,
     mutate: sendOtp,
   } = useMutation(['sendOtp'], (body: SendOtpDto) => OtpService.sendOtp(body), {
     onSuccess: () => {
       setAttempt((prev) => prev + 1);
     },
-    onError: (error) => {
-      notify({ error: true, message: error.response.data.message });
+    onError: (error: AxiosError<{ message: string }>) => {
+      if (error.response) {
+        notify({ error: true, message: error.response.data.message });
+      } else {
+        notify({ error: true, message: 'Ошибка при отправке кода' });
+      }
     },
   });
 
   const {
     isSuccess: checkOtpIsSuccess,
     isLoading: checkOtpIsLoading,
-    isError: checkOtpIsError,
-    error: checkOtpError,
     mutate: checkOtp,
   } = useMutation(
     ['checkOtp'],
@@ -66,8 +65,12 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
       onSuccess: () => {
         setTimeout(() => goNext(3), 1000);
       },
-      onError: (error) => {
-        notify({ error: true, message: error.response.data.message });
+      onError: (error: AxiosError<{ message: string }>) => {
+        if (error.response) {
+          notify({ error: true, message: error.response.data.message });
+        } else {
+          notify({ error: true, message: 'Ошибка при проверке кода' });
+        }
       },
     }
   );
@@ -89,7 +92,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
       setTimeout(() => location.reload(), 2000);
       return;
     }
-    setTimer(3000);
+    setTimer(300000);
     sendOtpHandler();
   };
   //--------------------------------------------------------------------//
@@ -105,7 +108,6 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
 
     return () => clearInterval(timerId);
   }, [sendOtpIsSuccess, timer]);
-  console.log('ATTEMPT: ', attempt);
 
   //--------------------------------------------------------------------//
 
