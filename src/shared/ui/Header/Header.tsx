@@ -2,6 +2,7 @@ import { FC } from 'react';
 import styles from './Header.module.scss';
 import Image from 'next/image';
 import CustomIconButton from '../IconButton/CustomIconButton';
+import HeaderCalendar from '../HeaderCalendar.tsx/HeaderCalendar';
 
 interface HeaderProps {}
 
@@ -12,9 +13,11 @@ const Header: FC<HeaderProps> = ({}) => {
         <div className={styles.logo__container}>
           <Image src="/images/logo/main_logo.svg" alt="Beta-Quiz Logo" fill />
         </div>
-        <CustomIconButton />
+        {/* <CustomIconButton /> */}
       </div>
-      <div className="right_wrapper"></div>
+      <div className={styles.right__wrapper}>
+        <HeaderCalendar />
+      </div>
     </header>
   );
 };

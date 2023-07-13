@@ -1,7 +1,8 @@
 .header {
   width: 100%;
   height: 115px;
-  border: 1px solid blue;
+  display: flex;
+  // border: 1px solid blue;
   padding: 0 25px;
 
   > .left__wrapper {
@@ -12,9 +13,18 @@
     align-items: center;
     > .logo__container {
       position: relative;
-      width: 108px;
-      height: 18px;
+      width: 180px;
+      height: 30px;
       border: 1px solid black;
     }
+  }
+
+  > .right__wrapper {
+    width: 80%;
+    height: 100%;
+    border: 1px solid green;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
