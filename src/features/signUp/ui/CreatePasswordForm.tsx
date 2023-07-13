@@ -7,32 +7,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createPasswordFormSchema } from '../model/creastePasswordFromSchema';
 import styles from './CreatePasswordForm.module.scss';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import CreatePasswordService, {
-  CreateTeacherDto,
-} from '../model/createPassword.service';
+import SignUpService from '../model/signUp.service';
 import useNotify from '@/shared/hooks/useNotify';
 import { useMutation } from '@tanstack/react-query';
 import { useAppSelector } from '@/appLayer/appStore';
 import { useRouter } from 'next/navigation';
+import { CreatePasswordInputs, CreateTeacherDto } from '../model/types';
+import { AxiosError } from 'axios';
 
-type Inputs = {
-  password: string;
-  confirmPassword: string;
-};
-
-interface CreatePasswordForm {}
-
-const CreatePasswordForm: FC<CreatePasswordForm> = ({}) => {
+const CreatePasswordForm: FC = () => {
   const { notify } = useNotify();
   const domain = useAppSelector((state) => state.signUp.domain);
   const phone = useAppSelector((state) => state.signUp.phone);
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<CreatePasswordInputs>({
     resolver: zodResolver(createPasswordFormSchema),
     mode: 'onSubmit',
   });
@@ -40,12 +33,10 @@ const CreatePasswordForm: FC<CreatePasswordForm> = ({}) => {
   const {
     isSuccess,
     isLoading,
-    isError,
-    error,
     mutate: createTeacher,
   } = useMutation(
     ['createTeacher'],
-    (body: CreateTeacherDto) => CreatePasswordService.createTeacher(body),
+    (body: CreateTeacherDto) => SignUpService.createTeacher(body),
     {
       onSuccess: () => {
         notify({
@@ -55,15 +46,18 @@ const CreatePasswordForm: FC<CreatePasswordForm> = ({}) => {
         });
         setTimeout(() => router.push('/signin'), 2000);
       },
-      onError: (error) => {
-        notify({ error: true, message: error.response.data.message });
+      onError: (error: AxiosError<{ message: string }>) => {
+        if (error.response) {
+          notify({ error: true, message: error.response.data.message });
+        } else {
+          notify({ error: true, message: 'Ошибка при регистрации' });
+        }
       },
     }
   );
 
-  const onSubmit: SubmitHandler<Inputs> = ({ password }) => {
-    console.log(domain, phone, password);
-    // createTeacher({ domain, phone, password: data.password });
+  const onSubmit: SubmitHandler<CreatePasswordInputs> = ({ password }) => {
+    createTeacher({ domain, phone, password });
   };
 
   return (

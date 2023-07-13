@@ -1,10 +1,9 @@
 'use client';
 
-import { Form } from '@/shared/ui/Form/Form';
-import { CheckTeacherForm } from '@/features/checkTeacher';
 import { useState } from 'react';
-import OtpVerify from '@/features/otpVerify/ui/OtpVerify';
-import CreatePasswordForm from '@/features/signUp/ui/CreatePasswordForm';
+import { Form } from '@/shared/ui/Form/Form';
+import { CheckTeacherForm, CreatePasswordForm } from '@/features/signUp';
+import { OtpVerify } from '@/features/otpVerify';
 
 const Registration = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);

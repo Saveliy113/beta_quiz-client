@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import { FC, ReactNode } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { checkTeacherFormSchema } from '../model/checkTeacherFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,7 +8,7 @@ import { TextField, TextFieldProps } from '@mui/material';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import { setClientInfo } from '../model/checkTeacherSlice';
-import { useAppDispatch, useAppSelector } from '@/appLayer/appStore';
+import { useAppDispatch } from '@/appLayer/appStore';
 import styles from './CheckTeacherForm.module.scss';
 import toast from 'react-hot-toast';
 import { useMutation } from '@tanstack/react-query';
@@ -19,6 +19,7 @@ import {
   CheckTeacherFormProps,
   CheckTeacherInputs,
 } from '../model/types';
+import { AxiosError } from 'axios';
 
 const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   const dispatch = useAppDispatch();
@@ -34,7 +35,16 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
 
   const { isLoading, mutate: checkTeacher } = useMutation(
     ['checkTeacher'],
-    (body: CheckTeacherDto) => SignUpService.checkTeacher(body)
+    (body: CheckTeacherDto) => SignUpService.checkTeacher(body),
+    {
+      onError: (error: AxiosError<{ message: string }>) => {
+        if (error.response) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('Ошибка при проверке учителя');
+        }
+      },
+    }
   );
 
   const onSubmit: SubmitHandler<CheckTeacherInputs> = (data) => {
@@ -47,9 +57,6 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
         onSuccess: () => {
           dispatch(setClientInfo(data));
           goNext(2);
-        },
-        onError: (error) => {
-          toast.error(error.response.data.message);
         },
       }
     );
@@ -90,10 +97,6 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
           <CustomButton
             innerText="Продолжить"
             onClick={() => {}}
-            // onClick={() => {
-            //   toast.success('Teacher is in a database');
-            //   goNext(2);
-            // }}
             disabled={!!errors.domain || !!errors.phone}
           />
         )}
