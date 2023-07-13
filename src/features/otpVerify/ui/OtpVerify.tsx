@@ -20,10 +20,11 @@ import { useAppSelector } from '@/appLayer/appStore';
 import { AxiosError } from 'axios';
 import { CheckOtpDto, OtpVerifyProps, SendOtpDto } from '../model/types';
 import OtpService from '../model/otpVerify.service';
+import { useKeyPress } from 'ahooks';
 
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
   const { notify } = useNotify();
-  const [timer, setTimer] = useState<number>(59000);
+  const [timer, setTimer] = useState<number>(3000);
   const [attempt, setAttempt] = useState<number>(0);
 
   const [otp, setOtp] = useState('');
@@ -76,6 +77,14 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
     sendOtp({ phone: '+' + clientPhone.replace(/\D/g, '') });
   };
 
+  useKeyPress('Enter', () => {
+    if (attempt === 0) {
+      sendOtpHandler();
+    } else {
+      checkOtpHandler();
+    }
+  });
+
   const checkOtpHandler = () => {
     checkOtp({ otp: otp, phone: '+' + clientPhone.replace(/\D/g, '') });
   };
@@ -86,7 +95,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
       setTimeout(() => location.reload(), 2000);
       return;
     }
-    setTimer(300000);
+    setTimer(3000); //Can Change waiting time
     sendOtpHandler();
   };
   //--------------------------------------------------------------------//

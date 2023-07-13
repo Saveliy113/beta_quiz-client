@@ -57,7 +57,13 @@ const CreatePasswordForm: FC = () => {
   );
 
   const onSubmit: SubmitHandler<CreatePasswordInputs> = ({ password }) => {
-    createTeacher({ domain, phone, password });
+    // createTeacher({ domain, phone, password });
+    console.log({ domain, phone, password });
+    notify({
+      success: true,
+      message: 'Вы успешно зарегистрированы!',
+    });
+    setTimeout(() => router.push('/signin'), 2000);
   };
 
   return (

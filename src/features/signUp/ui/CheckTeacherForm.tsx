@@ -20,6 +20,8 @@ import {
   CheckTeacherInputs,
 } from '../model/types';
 import { AxiosError } from 'axios';
+import { useKeyDown } from '@/shared/hooks/useKeyDown';
+import { useKeyPress } from 'ahooks';
 
 const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   const dispatch = useAppDispatch();
@@ -47,7 +49,8 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
     }
   );
 
-  const onSubmit: SubmitHandler<CheckTeacherInputs> = (data) => {
+  const onSubmit: SubmitHandler<CheckTeacherInputs> = (data, event) => {
+    console.log(data, event);
     checkTeacher(
       {
         domain: data.domain,
