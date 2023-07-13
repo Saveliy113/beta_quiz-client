@@ -16,16 +16,10 @@ import useNotify from '@/shared/hooks/useNotify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatTimer } from '@/shared/lib/formatTimer';
 import { useMutation } from '@tanstack/react-query';
-import OtpService, {
-  CheckOtpDto,
-  SendOtpDto,
-} from '../model/otpVerify.service';
 import { useAppSelector } from '@/appLayer/appStore';
 import { AxiosError } from 'axios';
-
-type OtpVerifyProps = {
-  goNext: Dispatch<SetStateAction<1 | 2 | 3>>;
-};
+import { CheckOtpDto, OtpVerifyProps, SendOtpDto } from '../model/types';
+import OtpService from '../model/otpVerify.service';
 
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext }) => {
   const { notify } = useNotify();

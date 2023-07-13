@@ -1,7 +1,5 @@
 import { $axios } from '@/shared/api';
-
-export type SendOtpDto = { phone: string };
-export type CheckOtpDto = { phone: string; otp: string };
+import { CheckOtpDto, SendOtpDto } from './types';
 
 class otpApi {
   async sendOtp(dto: SendOtpDto) {
