@@ -14,11 +14,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   if (!isAuthed || !token) {
-    notify({
-      error: true,
-      message: 'У вас нет прав для просмотра этой страницы',
-    });
-    router.push('/signin');
+    // notify({
+    //   error: true,
+    //   message: 'У вас нет прав для просмотра этой страницы',
+    // });
+    // router.push('/signin');
   }
   return <>{children}</>;
 };
