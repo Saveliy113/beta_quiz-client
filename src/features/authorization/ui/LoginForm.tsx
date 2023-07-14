@@ -16,16 +16,13 @@ import useNotify from '@/shared/hooks/useNotify';
 import { useRouter } from 'next/navigation';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
 import Cookies from 'js-cookie';
-
-type LoginResponse = {
-  data: {
-    auth_token: string;
-  };
-};
+import { useAppDispatch } from '@/appLayer/appStore';
+import { setAuthed } from '@/entities/user/model/userSlice';
 
 const LoginForm: FC = () => {
   const { notify } = useNotify();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -41,8 +38,9 @@ const LoginForm: FC = () => {
     (dto: LoginDto) => SignInService.login(dto),
     {
       onSuccess: ({ data }) => {
-        console.log(data);
         Cookies.set('_auth', data.auth_token);
+        dispatch(setAuthed(true));
+
         router.push('/lessons');
       },
       onError: (error: AxiosError<{ message: string }>) => {

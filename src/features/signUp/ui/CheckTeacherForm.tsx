@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, TextFieldProps } from '@mui/material';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import { setClientInfo } from '../model/checkTeacherSlice';
+import { setClientInfo } from '@/entities/user/model/userSlice';
 import { useAppDispatch } from '@/appLayer/appStore';
 import styles from './CheckTeacherForm.module.scss';
 import toast from 'react-hot-toast';
@@ -48,7 +48,6 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   );
 
   const onSubmit: SubmitHandler<CheckTeacherInputs> = (data, event) => {
-    console.log(data, event);
     checkTeacher(
       {
         domain: data.domain,

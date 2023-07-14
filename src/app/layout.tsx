@@ -1,3 +1,4 @@
+import AuthProvider from '@/appLayer/providers/authProvider/AuthProvider';
 import './globals.scss';
 import { ReactQueryProvider } from '@/appLayer/providers/index';
 import { ThemeRegistry } from '@/appLayer/providers/index';
@@ -14,13 +15,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log(process.env.SERVER_URL);
   return (
     <html lang="en">
       <body>
         <ReactQueryProvider>
           <ThemeRegistry>
-            <ReduxProvider>{children}</ReduxProvider>
+            <ReduxProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </ReduxProvider>
           </ThemeRegistry>
         </ReactQueryProvider>
         <Toaster />

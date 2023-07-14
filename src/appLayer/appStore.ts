@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
-import checkTeacherReducer from '@/features/signUp/model/checkTeacherSlice';
+import userReducer from '@/entities/user/model/userSlice';
 
 //REDUX PERSIST
 import {
@@ -18,11 +18,11 @@ import storage from '@/appLayer/storage';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['checkTeacher'],
+  whitelist: ['user'],
 };
 
 const rootReducer = combineReducers({
-  signUp: checkTeacherReducer,
+  user: userReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
