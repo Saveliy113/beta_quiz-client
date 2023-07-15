@@ -4,6 +4,7 @@ import { ReactQueryProvider } from '@/appLayer/providers/index';
 import { ThemeRegistry } from '@/appLayer/providers/index';
 import { ReduxProvider } from '@/appLayer/providers/redux/reduxProvider';
 import { Toaster } from 'react-hot-toast';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata = {
   title: 'Beta-Quiz',
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <NextTopLoader />
         <ReactQueryProvider>
           <ThemeRegistry>
             <ReduxProvider>
