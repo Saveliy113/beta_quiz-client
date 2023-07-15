@@ -1,10 +1,10 @@
 import AuthProvider from '@/appLayer/providers/authProvider/AuthProvider';
-import './globals.scss';
 import { ReactQueryProvider } from '@/appLayer/providers/index';
 import { ThemeRegistry } from '@/appLayer/providers/index';
 import { ReduxProvider } from '@/appLayer/providers/redux/reduxProvider';
 import { Toaster } from 'react-hot-toast';
 import NextTopLoader from 'nextjs-toploader';
+import './globals.scss';
 
 export const metadata = {
   title: 'Beta-Quiz',
@@ -19,7 +19,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextTopLoader />
+        <NextTopLoader
+          color="#1e88e5"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #1e88e5,0 0 5px #1e88e5"
+        />
         <ReactQueryProvider>
           <ThemeRegistry>
             <ReduxProvider>
