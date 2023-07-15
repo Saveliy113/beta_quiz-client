@@ -17,8 +17,8 @@ import { AxiosError } from 'axios';
 
 const CreatePasswordForm: FC = () => {
   const { notify } = useNotify();
-  const domain = useAppSelector((state) => state.signUp.domain);
-  const phone = useAppSelector((state) => state.signUp.phone);
+  const domain = useAppSelector((state) => state.user.domain);
+  const phone = useAppSelector((state) => state.user.phone);
   const router = useRouter();
 
   const {
@@ -78,6 +78,8 @@ const CreatePasswordForm: FC = () => {
       <CustomButton
         innerText="Зарегистрироваться"
         onClick={() => {}}
+        rounded
+        outlined
         disabled={isLoading || isSuccess}
       />
     </form>

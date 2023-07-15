@@ -30,7 +30,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
   const [attempt, setAttempt] = useState<number>(0);
 
   const [otp, setOtp] = useState('');
-  const clientPhone = useAppSelector((state) => state.signUp.phone);
+  const clientPhone = useAppSelector((state) => state.user.phone);
 
   //------------------------------Queries------------------------------//
 
@@ -184,7 +184,12 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
       )}
 
       {!sendOtpIsLoading && !sendOtpIsSuccess && attempt < 1 && (
-        <CustomButton innerText="Отправить код" onClick={sendOtpHandler} />
+        <CustomButton
+          innerText="Отправить код"
+          onClick={sendOtpHandler}
+          rounded
+          outlined
+        />
       )}
 
       {sendOtpIsLoading && attempt < 1 && <DotsLoader />}
@@ -219,6 +224,8 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
             <CustomButton
               innerText="Подтвердить"
               onClick={checkOtpHandler}
+              rounded
+              outlined
               disabled={checkOtpIsLoading || checkOtpIsSuccess}
             />
           )}

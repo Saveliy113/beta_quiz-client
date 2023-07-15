@@ -88,6 +88,8 @@ const LoginForm: FC = () => {
         <CustomButton
           innerText="Войти"
           onClick={() => {}}
+          outlined
+          rounded
           disabled={!!errors.phone || !!errors.password}
         />
       )}

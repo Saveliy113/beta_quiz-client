@@ -97,6 +97,8 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
           <CustomButton
             innerText="Продолжить"
             onClick={() => {}}
+            rounded
+            outlined
             disabled={!!errors.domain || !!errors.phone}
           />
         )}

@@ -2,16 +2,15 @@
 
 .customButton {
   width: 100%;
-  margin-top: 30px;
+  height: 56px;
+  // margin-top: 30px;
   position: relative;
   font-size: 24px;
   font-weight: bold;
-  color: $primary-main;
-  height: 56px;
   outline: none;
-  background: none;
-  border: 1px solid $primary-main;
-  border-radius: 999px;
+  border: none;
+  border-radius: 12px;
+  background-color: $primary-light;
   cursor: pointer;
   transition: all 0.1s ease-in;
 
@@ -30,5 +29,21 @@
       background: none;
       border: 1px solid rgba($primary-main, 0.3);
     }
+  }
+
+  &.outlined {
+    background: none;
+    border: 1px solid $primary-main;
+    color: $primary-main;
+
+    &:hover {
+      background: $primary-main;
+      border: none;
+      color: $pure-white;
+    }
+  }
+
+  &.rounded {
+    border-radius: 999px;
   }
 }

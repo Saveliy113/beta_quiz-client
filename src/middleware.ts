@@ -2,11 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(req: NextRequest) {
   const cookie = req.cookies.get('_auth')?.value;
-
-  if (
-    req.nextUrl.pathname === '/signin' ||
-    req.nextUrl.pathname === '/signup'
-  ) {
+  const pathname = req.nextUrl.pathname;
+  if (pathname === '/signin' || pathname === '/signup' || pathname === '/') {
     return NextResponse.next();
   } else {
     if (!cookie) {
