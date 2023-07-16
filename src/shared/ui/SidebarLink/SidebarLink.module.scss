@@ -17,4 +17,10 @@
     color: $secondary-main;
     transform: none;
   }
+
+  &.active {
+    background-color: $secondary-200;
+    color: $secondary-main;
+    transform: none;
+  }
 }
