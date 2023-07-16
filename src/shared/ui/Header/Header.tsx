@@ -5,6 +5,7 @@ import CustomIconButton from '../IconButton/CustomIconButton';
 import HeaderCalendar from '../HeaderCalendar.tsx/HeaderCalendar';
 import CustomButton from '../CustomButton/CustomButton';
 import { LogOut } from 'lucide-react';
+import Link from 'next/link';
 
 interface HeaderProps {}
 
@@ -12,9 +13,9 @@ const Header: FC<HeaderProps> = ({}) => {
   return (
     <header className={styles.header}>
       <div className={styles.left__wrapper}>
-        <div className={styles.logo__container}>
+        <Link href="/lessons" className={styles.logo__container}>
           <Image src="/images/logo/main_logo.svg" alt="Beta-Quiz Logo" fill />
-        </div>
+        </Link>
         {/* <CustomIconButton /> */}
       </div>
       <div className={styles.right__wrapper}>

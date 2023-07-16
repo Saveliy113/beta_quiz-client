@@ -1,0 +1,20 @@
+@import '@/shared/colors.scss';
+
+.sidebar__link {
+  color: black;
+  text-decoration: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 80%;
+  height: 50px;
+  border-radius: 12px;
+  padding: 10px 16px 10px 24px;
+
+  &:hover {
+    background-color: $secondary-200;
+    color: $secondary-main;
+    transform: none;
+  }
+}

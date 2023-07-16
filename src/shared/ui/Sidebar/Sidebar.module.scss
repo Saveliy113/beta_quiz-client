@@ -1,0 +1,10 @@
+.sidebar {
+  width: 18%;
+  min-height: calc(100vh - 115px);
+  height: 100%;
+  border: 1px solid red;
+  margin-left: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
