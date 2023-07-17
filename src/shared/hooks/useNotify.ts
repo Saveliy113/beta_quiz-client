@@ -12,7 +12,7 @@ const useNotify = () => {
       toast.success(`${message}`, {
         duration: 4000,
         style: {
-          width: '250px',
+          minWidth: '250px',
           backgroundColor: '#b9f6ca',
           padding: '20px',
         },
@@ -24,7 +24,7 @@ const useNotify = () => {
       toast.error(`${message}`, {
         duration: 4000,
         style: {
-          width: '250px',
+          minWidth: '250px',
           backgroundColor: '#fbe9e7',
           padding: '20px',
         },

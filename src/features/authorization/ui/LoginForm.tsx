@@ -40,6 +40,7 @@ const LoginForm: FC = () => {
       onSuccess: ({ data }) => {
         Cookies.set('_auth', data.auth_token);
         dispatch(setAuthed(true));
+        notify({ success: true, message: 'Вход выполнен успешно' });
 
         router.push('/lessons');
       },

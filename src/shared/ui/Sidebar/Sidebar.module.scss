@@ -2,40 +2,76 @@
 
 .sidebar {
   position: relative;
+  left: 0;
   width: 18%;
   min-height: calc(100vh - 115px);
   height: 100%;
-  // border: 1px solid red;
-  margin-left: 25px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-left: 25px;
+  animation: openMenu 0.3s forwards;
 
   &.closed {
+    animation: closeMenu 0.3s forwards;
+  }
+}
+
+.menu__btn {
+  position: fixed;
+  left: 15%;
+  top: 40px;
+  width: fit-content;
+  height: fit-content;
+  padding: 5px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  color: $secondary-main !important;
+  border-radius: 8px !important;
+  background-color: $secondary-200 !important;
+
+  &:hover {
+    background-color: darken($secondary-200, 3%) !important;
+  }
+}
+
+@keyframes closeMenu {
+  0% {
+    display: block;
+    position: relative;
+    left: 0;
+    width: 18%;
+  }
+  50% {
+    left: -100%;
+  }
+  100% {
+    display: none;
+    position: absolute;
     left: -100%;
     width: 0;
+    height: 0;
   }
+}
 
-  > .menu__btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    left: 15%;
-    top: 40px;
-    padding: 0;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    width: fit-content;
-    height: fit-content;
-    color: $secondary-main !important;
-    padding: 5px !important;
-    border-radius: 8px !important;
-    background-color: $secondary-200 !important;
-
-    &:hover {
-      background-color: darken($secondary-200, 3%) !important;
-    }
+@keyframes openMenu {
+  0% {
+    position: absolute;
+    display: none;
+    width: 0;
+    height: 0;
+    left: -100%;
+  }
+  50% {
+    left: 0;
+  }
+  100% {
+    position: relative;
+    display: block;
+    width: 18%;
   }
 }
