@@ -14,6 +14,7 @@ import { useAppSelector } from '@/appLayer/appStore';
 import { useRouter } from 'next/navigation';
 import { CreatePasswordInputs, CreateTeacherDto } from '../model/types';
 import { AxiosError } from 'axios';
+import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
 
 const CreatePasswordForm: FC = () => {
   const { notify } = useNotify();
@@ -65,23 +66,29 @@ const CreatePasswordForm: FC = () => {
         type="password"
         error={!!errors?.password}
         helperText={errors?.password?.message}
+        fullWidth
         label="Пароль"
         {...register('password')}
       />
       <TextField
         type="password"
         error={!!errors?.password}
+        fullWidth
         helperText={errors?.password?.message}
         label="Повторите пароль"
         {...register('confirmPassword')}
       />
-      <CustomButton
-        innerText="Зарегистрироваться"
-        onClick={() => {}}
-        rounded
-        outlined
-        disabled={isLoading || isSuccess}
-      />
+      {isLoading ? (
+        <DotsLoader />
+      ) : (
+        <CustomButton
+          innerText="Зарегистрироваться"
+          onClick={() => {}}
+          rounded
+          outlined
+          disabled={isLoading || isSuccess}
+        />
+      )}
     </form>
   );
 };

@@ -33,7 +33,11 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
     mode: 'onSubmit',
   });
 
-  const { isLoading, mutate: checkTeacher } = useMutation(
+  const {
+    isLoading,
+    isSuccess,
+    mutate: checkTeacher,
+  } = useMutation(
     ['checkTeacher'],
     (body: CheckTeacherDto) => SignUpService.checkTeacher(body),
     {
@@ -99,7 +103,7 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
             onClick={() => {}}
             rounded
             outlined
-            disabled={!!errors.domain || !!errors.phone}
+            disabled={!!errors.domain || !!errors.phone || isSuccess}
           />
         )}
       </>
