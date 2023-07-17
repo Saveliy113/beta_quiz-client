@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
 import userReducer from '@/entities/user/model/userSlice';
+import sidebarReducer from '@/shared/ui/Sidebar/sidebarSlice';
 
 //REDUX PERSIST
 import {
@@ -18,11 +19,12 @@ import storage from '@/appLayer/storage';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user'],
+  whitelist: ['user', 'sidebar'],
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
+  sidebar: sidebarReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,11 +1,11 @@
 'use client';
 
 import { Dispatch, FC, SetStateAction } from 'react';
-import styles from './Sidebar.module.scss';
 import SidebarLink from '../SidebarLink/SidebarLink';
 import { AlignJustify } from 'lucide-react';
 import { BookOpen, Users, ClipboardList, HelpCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import styles from './Sidebar.module.scss';
 
 interface SidebarProps {
   isOpened: boolean;
@@ -13,6 +13,7 @@ interface SidebarProps {
 }
 
 const Sidebar: FC<SidebarProps> = ({ isOpened, setIsOpened }) => {
+  console.log('IsOpened: ', isOpened);
   return (
     <>
       <button
@@ -22,7 +23,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpened, setIsOpened }) => {
         <AlignJustify />
       </button>
 
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {isOpened && (
           <motion.div
             className={styles.sidebar}

@@ -9,6 +9,9 @@ import './globals.scss';
 export const metadata = {
   title: 'Beta-Quiz',
   description: 'Beta Quiz app',
+  // icons: {
+  //   icon: './favicon.ico',
+  // },
 };
 
 export default function RootLayout({
