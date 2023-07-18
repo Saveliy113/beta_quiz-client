@@ -9,8 +9,7 @@ import { loginFormSchema } from '../model/loginFormSchema';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import { useMutation } from '@tanstack/react-query';
-import SignInService from '../model/signIn.service';
-import { LoginDto, LoginFormInputs } from '../model/types';
+import { LoginFormInputs } from '../model/types';
 import { AxiosError } from 'axios';
 import useNotify from '@/shared/hooks/useNotify';
 import { useRouter } from 'next/navigation';
@@ -18,6 +17,8 @@ import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
 import Cookies from 'js-cookie';
 import { useAppDispatch } from '@/appLayer/appStore';
 import { setAuthed } from '@/entities/user/model/userSlice';
+import { LoginDto } from '@/entities/user/model/types';
+import UserService from '@/entities/user/model/user.service';
 
 const LoginForm: FC = () => {
   const { notify } = useNotify();
@@ -33,25 +34,25 @@ const LoginForm: FC = () => {
     mode: 'onSubmit',
   });
 
-  const { isLoading, mutate: signIn } = useMutation(
-    ['signIn'],
-    (dto: LoginDto) => SignInService.login(dto),
-    {
-      onSuccess: ({ data }) => {
-        Cookies.set('_auth', data.auth_token);
-        dispatch(setAuthed(true));
-        notify({ success: true, message: 'Вход выполнен успешно' });
+  const {
+    isLoading,
+    isSuccess,
+    mutate: signIn,
+  } = useMutation(['signIn'], (dto: LoginDto) => UserService.login(dto), {
+    onSuccess: ({ data }) => {
+      Cookies.set('_auth', data.auth_token);
+      dispatch(setAuthed(true));
+      notify({ success: true, message: 'Вход выполнен успешно' });
 
-        router.push('/lessons');
-      },
-      onError: (error: AxiosError<{ message: string }>) => {
-        if (error.response?.data.message) {
-          notify({ error: true, message: error.response.data.message });
-        } else
-          notify({ error: true, message: 'Возникла ошибка при авторизации' });
-      },
-    }
-  );
+      router.push('/lessons');
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      if (error.response?.data.message) {
+        notify({ error: true, message: error.response.data.message });
+      } else
+        notify({ error: true, message: 'Возникла ошибка при авторизации' });
+    },
+  });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     signIn(data);
@@ -91,7 +92,7 @@ const LoginForm: FC = () => {
           onClick={() => {}}
           outlined
           rounded
-          disabled={!!errors.phone || !!errors.password}
+          disabled={!!errors.phone || !!errors.password || isSuccess}
         />
       )}
     </form>
