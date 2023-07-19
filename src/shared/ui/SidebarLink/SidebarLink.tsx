@@ -14,13 +14,13 @@ interface SidebarLinkProps {
 
 const SidebarLink: FC<SidebarLinkProps> = ({ text, icon, href }) => {
   const currentRoute = usePathname();
-  console.log(currentRoute);
+  console.log('Current Route: ', currentRoute);
   return (
     <Link
       href={href}
       className={clsx(
         styles.sidebar__link,
-        href === currentRoute && styles.active
+        currentRoute.includes(href) && styles.active
       )}
     >
       {icon}

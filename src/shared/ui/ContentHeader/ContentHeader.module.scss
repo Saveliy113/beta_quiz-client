@@ -2,7 +2,15 @@
   width: 95%;
   margin: 30px auto;
 
-  > h1 {
-    font-size: 50px;
+  > .header__wrapper {
+    display: flex;
+    justify-content: space-between;
+    > h1 {
+      font-size: 50px;
+    }
+
+    > .filter__slot {
+      align-self: flex-end;
+    }
   }
 }

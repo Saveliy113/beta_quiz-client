@@ -8,14 +8,17 @@ import { red } from '@mui/material/colors';
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#556cd6',
+      main: '#2196f3',
     },
     secondary: {
-      main: '#19857b',
+      main: '#673ab7',
     },
     error: {
       main: red.A400,
     },
+  },
+  typography: {
+    fontFamily: 'Nunito',
   },
 });
 
