@@ -13,7 +13,6 @@ interface SidebarProps {
 }
 
 const Sidebar: FC<SidebarProps> = ({ isOpened, setIsOpened }) => {
-  console.log('IsOpened: ', isOpened);
   return (
     <>
       <button
@@ -27,6 +26,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpened, setIsOpened }) => {
         {isOpened && (
           <motion.div
             className={styles.sidebar}
+            key="sidebar"
             initial="initialState"
             animate="animateState"
             exit="exitState"
@@ -37,7 +37,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpened, setIsOpened }) => {
                 width: 0,
               },
               animateState: { left: 0, width: '18%' },
-              exitState: { left: '-10%', width: 0 },
+              exitState: { width: 0, left: '-10%' },
             }}
           >
             <SidebarLink href="/lessons" text="Уроки" icon={<BookOpen />} />

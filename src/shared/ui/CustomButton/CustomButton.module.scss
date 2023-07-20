@@ -27,13 +27,18 @@
 
     &:hover {
       background: $primary-main;
-      border: none;
       color: $pure-white;
     }
   }
 
   &.rounded {
     border-radius: 999px;
+  }
+
+  &.fitContent {
+    width: fit-content;
+    height: fit-content;
+    padding: 7px 13px;
   }
 
   &:disabled {

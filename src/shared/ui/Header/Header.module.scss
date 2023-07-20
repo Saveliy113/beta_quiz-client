@@ -1,15 +1,13 @@
 .header {
   width: 100%;
   height: 115px;
-  display: flex;
-  // border: 1px solid blue;
   padding: 0 25px;
+  display: flex;
 
   > .left__wrapper {
     width: 18%;
     height: 100%;
     display: flex;
-    // border: 1px solid red;
     align-items: center;
     > .logo__container {
       position: relative;
@@ -21,7 +19,6 @@
       &:hover {
         transform: none;
       }
-      // border: 1px solid black;
     }
   }
 
@@ -29,10 +26,9 @@
     width: 82%;
     height: 100%;
     padding-left: 8%;
-    // border: 1px solid green;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 
     > .logout__button {
       width: fit-content;

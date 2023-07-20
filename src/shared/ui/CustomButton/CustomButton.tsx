@@ -10,6 +10,7 @@ interface CustomButtonProps {
   isLoading?: boolean;
   outlined?: boolean;
   rounded?: boolean;
+  width: 'fullWidth' | 'fitContent';
   children?: ReactNode;
 }
 
@@ -19,6 +20,7 @@ const CustomButton: FC<CustomButtonProps> = ({
   onClick,
   outlined,
   rounded,
+  width,
   className,
   isLoading,
   children,
@@ -30,7 +32,8 @@ const CustomButton: FC<CustomButtonProps> = ({
         styles.customButton,
         className,
         outlined && styles.outlined,
-        rounded && styles.rounded
+        rounded && styles.rounded,
+        width === 'fitContent' && styles.fitContent
       )}
       disabled={disabled || isLoading}
     >

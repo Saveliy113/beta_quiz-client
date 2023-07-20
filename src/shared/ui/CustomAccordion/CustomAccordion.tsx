@@ -1,15 +1,11 @@
 'use client';
 
 import { FC } from 'react';
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-} from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import styles from './CustomAccordion.module.scss';
 import { BookOpen } from 'lucide-react';
+import CustomButton from '../CustomButton/CustomButton';
+import styles from './CustomAccordion.module.scss';
 
 interface CustomAccordionProps {}
 
@@ -17,7 +13,9 @@ const CustomAccordion: FC<CustomAccordionProps> = ({}) => {
   return (
     <Accordion className={styles.customAccordion}>
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon style={{width: '50px', height: '50px'}} />}
+        expandIcon={
+          <ExpandMoreIcon style={{ width: '50px', height: '50px' }} />
+        }
         aria-controls="panel1a-content"
         id="panel1a-header"
         className={styles.accordion__summary}
@@ -28,10 +26,41 @@ const CustomAccordion: FC<CustomAccordionProps> = ({}) => {
         </div>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </Typography>
+        <div className={styles.accordion__item}>
+          <p>Quiz 15.03.2023</p>
+          <p>Математика, Сложные дроби</p>
+          <p>ALA_E_3KOY_Z</p>
+        </div>
+        <div className={styles.accordion__item}>
+          <p>Quiz 15.03.2023</p>
+          <p>Математика, Сложные дроби</p>
+          <p>ALA_E_3KOY_Z</p>
+        </div>
+        <div className={styles.accordion__item}>
+          <p>Quiz 15.03.2023</p>
+          <p>Математика, Сложные дроби</p>
+          <p>ALA_E_3KOY_Z</p>
+        </div>
+        <div className={styles.accordion__item}>
+          <p>Quiz 15.03.2023</p>
+          <p>Математика, Сложные дроби</p>
+          <p>ALA_E_3KOY_Z</p>
+        </div>
+        <div className={styles.accordion__item}>
+          <p>Quiz 15.03.2023</p>
+          <p>Математика, Сложные дроби</p>
+          <p>ALA_E_3KOY_Z</p>
+        </div>
+
+        <div className={styles.accordion__actions}>
+          <CustomButton
+            innerText="Подробнее"
+            outlined
+            rounded
+            width="fitContent"
+            className={styles.accordion__btn}
+          />
+        </div>
       </AccordionDetails>
     </Accordion>
   );
