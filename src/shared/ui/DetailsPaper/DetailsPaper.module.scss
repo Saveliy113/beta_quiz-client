@@ -1,0 +1,78 @@
+@import '@/shared/colors.scss';
+
+.details__paper {
+  position: relative;
+  width: 25%;
+  min-height: 100px;
+  padding: 10px 25px;
+
+  border-radius: 12px;
+  color: $pure-white;
+  font-size: 24px;
+  z-index: 0;
+  overflow: hidden;
+
+  &::before {
+    display: block;
+    position: absolute;
+    top: -259px;
+    left: 82px;
+    content: '';
+    width: 112%;
+    height: 282%;
+    border-radius: 50%;
+    z-index: -1;
+    // background-color: transparentize($primary-800, 0.6);
+  }
+
+  &::after {
+    display: block;
+    position: absolute;
+    top: -186px;
+    left: 223px;
+    content: '';
+    width: 112%;
+    height: 262%;
+    border-radius: 50%;
+    z-index: -1;
+    // background-color: transparentize($primary-800, 0.8);
+  }
+
+  > p {
+    display: block;
+    position: relative;
+    font-size: 32px;
+    font-weight: bold;
+    // z-index: 2;
+  }
+
+  &.blue {
+    background-color: $primary-dark;
+    &::before {
+      background-color: transparentize($primary-800, 0.6);
+    }
+    &::after {
+      background-color: transparentize($primary-800, 0.8);
+    }
+  }
+
+  &.violet {
+    background-color: $secondary-main;
+    &::before {
+      background-color: transparentize($secondary-800, 0.6);
+    }
+    &::after {
+      background-color: transparentize($secondary-800, 0.8);
+    }
+  }
+
+  &.yellow {
+    background-color: #fdb954;
+    &::before {
+      background-color: transparentize(#fff7eb, 0.6);
+    }
+    &::after {
+      background-color: transparentize(#fff7eb, 0.8);
+    }
+  }
+}
