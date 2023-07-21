@@ -14,10 +14,9 @@ const page: FC<pageProps> = ({}) => {
         <div className={styles.info__wrapper}>
           <CardInfoHeader
             text="Информация об уроке"
+            icon={<HelpCircle />}
             className={styles.lesson__info}
-          >
-            <HelpCircle />
-          </CardInfoHeader>
+          />
           <div className={styles.info}>
             <div className={styles.info__block}>
               <span>Дата</span>
@@ -44,10 +43,9 @@ const page: FC<pageProps> = ({}) => {
         <div className={styles.info__wrapper}>
           <CardInfoHeader
             text="Группа ALA_M_6KOY_A5"
+            icon={<Users2 />}
             className={styles.group__info}
-          >
-            <Users2 />
-          </CardInfoHeader>
+          />
           <div className={styles.info}>
             <p>1. Абдулдаев Мағжан (9 лет) </p>
             <p>2. Дамир Қайратұлы</p>

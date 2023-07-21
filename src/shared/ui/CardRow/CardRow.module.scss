@@ -1,0 +1,30 @@
+@import '@/shared/colors.scss';
+
+.card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(#000000, 0.25);
+
+  > p {
+    font-size: 19px;
+    font-weight: 500;
+  }
+
+  > .row__btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $primary-main;
+    border-radius: 50%;
+
+    > svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

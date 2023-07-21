@@ -1,0 +1,11 @@
+@import '@/shared/colors.scss';
+
+.content {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.quiz__header {
+  background-color: $primary-200;
+  margin-bottom: 20px !important;
+}
