@@ -1,6 +1,19 @@
+@import '@/shared/colors.scss';
+
 .quiz__details {
   width: 95%;
   margin: 0 auto;
+  margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
+}
+
+.content__wrapper {
+  width: 95%;
+  margin: 0 auto;
+
+  & .quiz__header {
+    margin-bottom: 20px !important;
+    background-color: $primary-200;
+  }
 }
