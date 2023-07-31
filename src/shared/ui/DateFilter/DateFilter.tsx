@@ -12,53 +12,56 @@ import { Calendar } from 'lucide-react';
 interface DateFilterProps {}
 
 const DateFilter: FC<DateFilterProps> = ({}) => {
+  const dateRef = useRef<HTMLDivElement>(null);
+  const dateRangeCalendar = dateRef.current;
   const [opened, setIsOpened] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
-  const selectionRange = {
-    startDate: startDate,
-    endDate: endDate,
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
     key: 'selection',
-  };
+  });
 
   const handleSelect = (date: any) => {
-    setStartDate(date.selection.startDate);
-    setEndDate(date.selection.endDate);
-    // {
-    //   selection: {
-    //     startDate: [native Date Object],
-    //     endDate: [native Date Object],
-    //   }
-    // }
+    setDateRange((prev) => ({
+      ...prev,
+      startDate: date.selection.startDate,
+      endDate: date.selection.endDate,
+    }));
   };
-  console.log('Opened: ', opened);
-  const dateRef = useRef<HTMLDivElement>(null);
+
+  const toggleCalendar = () => {
+    setIsOpened((prev) => !prev);
+  };
 
   useEffect(() => {
-    if (dateRef && dateRef.current) {
-      dateRef.current.addEventListener('mouseenter', () => {
-        console.log('MouseEnter');
-        setIsOpened((prev) => !prev);
-      });
-      dateRef.current.addEventListener('mouseleave', () => {
-        console.log('MouseLeave');
-        setIsOpened((prev) => !prev);
-      });
+    if (dateRangeCalendar) {
+      dateRangeCalendar.addEventListener('mouseenter', toggleCalendar);
+      dateRangeCalendar.addEventListener('mouseleave', toggleCalendar);
     }
-  }, []);
+
+    return () => {
+      if (dateRangeCalendar) {
+        dateRangeCalendar.removeEventListener('mouseenter', toggleCalendar);
+        dateRangeCalendar.removeEventListener(
+          'mouseleave',
+          () => toggleCalendar
+        );
+      }
+    };
+  }, [dateRangeCalendar]);
 
   return (
     <>
       <div className={styles.date__wrapper} ref={dateRef}>
         <div className={styles.date__label}>
           <Calendar />
-          {startDate.toLocaleDateString()} — {endDate.toLocaleDateString()}
+          {dateRange.startDate.toLocaleDateString()} —{' '}
+          {dateRange.endDate.toLocaleDateString()}
         </div>
         {opened && (
           <DateRangePicker
             locale={ru}
-            ranges={[selectionRange]}
+            ranges={[dateRange]}
             onChange={handleSelect}
             staticRanges={[]}
             inputRanges={[]}
@@ -67,8 +70,6 @@ const DateFilter: FC<DateFilterProps> = ({}) => {
           />
         )}
       </div>
-
-      {/* <button onClick={() => setIsOpened((prev) => !prev)}>Hide</button> */}
     </>
   );
 };
