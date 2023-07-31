@@ -1,0 +1,24 @@
+@import '@/shared/colors.scss';
+
+.date__wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+  width: fit-content;
+
+  > .date__label {
+    width: fit-content;
+    padding: 5px 20px;
+    border-radius: 8px;
+    border: 1px solid #9a9a9a;
+  }
+}
+
+.date__range {
+  position: absolute;
+  z-index: 999;
+  top: 43px;
+  border-radius: 8px;
+}
