@@ -321,9 +321,12 @@ const LessonsTable: FC<LessonsTableProps> = ({}) => {
   const pathname = usePathname();
 
   const handlePagination = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
     if (page >= 1) {
-      router.push(`${pathname}?page=${page + 1}`);
-    } else router.push(pathname);
+      params.set('page', String(page + 1));
+      // router.push(`${pathname}?page=${page + 1}`);
+      router.push(`${pathname}?${params}`);
+    } else router.push(`${pathname}?${params}`);
   };
 
   useEffect(() => {
