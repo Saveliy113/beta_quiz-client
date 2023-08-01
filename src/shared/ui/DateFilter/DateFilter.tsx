@@ -17,13 +17,14 @@ const DateFilter: FC<DateFilterProps> = ({}) => {
   const searchParams = useSearchParams()!;
   const router = useRouter();
   const pathname = usePathname();
-  const startDate = searchParams.get('from');
-  const endDate = searchParams.get('to');
-
-  const urlStartDate = new Date(startDate || new Date());
-  const urlEndDate = new Date(endDate || new Date());
   const dateRef = useRef<HTMLDivElement>(null);
   const dateRangeCalendar = dateRef.current;
+
+  const startDateParam = searchParams.get('from');
+  const endDateParam = searchParams.get('to');
+  const urlStartDate = new Date(startDateParam || new Date());
+  const urlEndDate = new Date(endDateParam || new Date());
+
   const [opened, setIsOpened] = useState(false);
   const [dateRange, setDateRange] = useState({
     startDate: urlStartDate,
@@ -42,7 +43,6 @@ const DateFilter: FC<DateFilterProps> = ({}) => {
   );
 
   const handleSelect = (date: any) => {
-    console.log(date);
     setDateRange((prev) => ({
       ...prev,
       startDate: date.selection.startDate,
@@ -67,7 +67,7 @@ const DateFilter: FC<DateFilterProps> = ({}) => {
         endDate: urlEndDate,
       }));
     }
-  }, [startDate, endDate]);
+  }, [startDateParam, endDateParam]);
 
   const toggleCalendar = () => {
     setIsOpened((prev) => !prev);

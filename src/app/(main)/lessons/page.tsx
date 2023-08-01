@@ -10,9 +10,9 @@ const page = (props: Props) => {
   return (
     <>
       <ContentHeader text="Уроки" />
-      <div className={styles.range__wrapper}>
+      {/* <div className={styles.range__wrapper}>
         <DateFilter />
-      </div>
+      </div> */}
       <LessonsTable />
     </>
   );
