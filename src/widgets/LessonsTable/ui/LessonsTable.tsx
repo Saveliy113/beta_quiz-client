@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { GetLessonsDto } from '@/entities/lesson/model/types';
 import LessonsService from '@/entities/lesson/model/lessons.service';
+import { GetGroupsDto } from '../model/types';
+import TableService from '../model/table.service';
 
 const columns: GridColDef[] = [
   { field: 'date', headerName: 'Дата', width: 150, sortable: false },
@@ -313,27 +315,71 @@ const columns: GridColDef[] = [
 interface LessonsTableProps {}
 
 const LessonsTable: FC<LessonsTableProps> = ({}) => {
+  //---------------------------------DEFAULT----------------------------------------//
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+  //-------------------------------------------------------------------------------//
+
+  //---------------------------------STATES----------------------------------------//
+
   const urlPage = searchParams.get('page') || 0;
   const [rows, setRows] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
     page: +urlPage,
     pageSize: 100,
   });
-
-  const router = useRouter();
-  const pathname = usePathname();
-
   const [rowsNumber, setRowsNumber] = useState<number>(0);
+  const [groups, setGroups] = useState([]);
+
+  //-------------------------------------------------------------------------------//
+
+  //---------------------------------QUERIES----------------------------------------//
+
   const {
     isLoading,
     isSuccess,
+    data: lessonsResponse,
     mutate: getLessons,
   } = useMutation(['getLessons'], (body: GetLessonsDto) =>
     LessonsService.getLessons(body)
   );
 
+  const {
+    isLoading: groupsIsLoading,
+    isSuccess: groupsIsSuccess,
+    data: groupsResponse,
+    mutate: getGroups,
+  } = useMutation(['getGroups'], (body: GetGroupsDto) =>
+    TableService.getGroups(body)
+  );
+
+  //-------------------------------------------------------------------------------//
+
+  //---------------------------------LOGS----------------------------------------//
+  // console.log('UseState Groups: ', groups);
+  // console.log('ROWS: ', rows);
+
+  //-------------------------------------------------------------------------------//
+
   useEffect(() => {
+    getGroups(
+      {
+        domain: 'metastudy',
+        teacher: 0,
+      }
+      // {
+      //   onSuccess: ({ data }: any) => {
+      //     console.log('Groups Data: ', data);
+      //     let dataArr: any = [];
+      //     data.forEach((item: any) => {
+      //       dataArr = dataArr.concat(item.items);
+      //     });
+      //     setGroups(dataArr);
+      //   },
+      // }
+    );
+
     getLessons(
       {
         domain: 'metastudy',
@@ -341,32 +387,63 @@ const LessonsTable: FC<LessonsTableProps> = ({}) => {
         endDate: '2023-08-01',
         page: 0,
         teacher: 0,
-      },
-      {
-        onSuccess: ({ data }: any) => {
-          let rowsArr = [];
-          console.log(data);
-          data.forEach((element) => {
-            rowsArr = rowsArr.concat(element.items);
-          });
-          console.log('ROWS ARR: ', rowsArr);
-          setRows(
-            rowsArr.map((row, id) => ({
-              id: id + 1,
-              date: row.date,
-              time: `${row.time_from} — ${row.time_to}`,
-              group: row.group_ids[0],
-              lesson: row.subject_id,
-            }))
-          );
-
-          setRowsNumber(rowsArr.length);
-        },
       }
+      // {
+      //   onSuccess: ({ data }: any) => {
+      //     let rowsArr: any = [];
+      //     console.log(data);
+      //     data.forEach((element: any) => {
+      //       rowsArr = rowsArr.concat(element.items);
+      //     });
+      //     console.log('ROWS ARR: ', rowsArr);
+      //     setRows(
+      //       rowsArr.map((row: any, id: any) => ({
+      //         id: id + 1,
+      //         date: row.date,
+      //         time: `${row.time_from} — ${row.time_to}`,
+      //         group: row.group_ids[0],
+      //         lesson: row.subject_id,
+      //       }))
+      //     );
+
+      //     setRowsNumber(rowsArr.length);
+      //   },
+      // }
     );
   }, []);
 
-  console.log('ROWS: ', rows);
+  useEffect(() => {
+    if (isSuccess && groupsIsSuccess) {
+      let groupsArr: any = [];
+      groupsResponse.data.forEach((group: any) => {
+        groupsArr = groupsArr.concat(group.items);
+      });
+      console.log('GroupsArr1: ', groupsArr);
+      console.log(lessonsResponse);
+
+      let lessonsArr: any = [];
+      lessonsResponse.data.forEach((branch: any) => {
+        lessonsArr = lessonsArr.concat(branch.items);
+      });
+      console.log('LessonsArr1: ', lessonsArr);
+
+      lessonsArr = lessonsArr.map((lesson: any, id: any) => ({
+        id: id + 1,
+        date: lesson.date,
+        time: `${lesson.time_from} — ${lesson.time_to}`,
+        group: groupsArr.find((group: any) => group.id === lesson.group_ids[0])
+          ?.name,
+        // group: lesson.group_ids[0],
+        lesson: lesson.subject_id,
+      }));
+
+      console.log('LessonsArr2: ', lessonsArr);
+      setRows(lessonsArr);
+    }
+  }, [isSuccess, groupsIsSuccess]);
+
+  //---------------------------------PAGINATION----------------------------------------//
+
   const handlePagination = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     if (page >= 1) {
@@ -385,6 +462,8 @@ const LessonsTable: FC<LessonsTableProps> = ({}) => {
       setPaginationModel({ page: +urlPage - 1, pageSize: 5 });
     }
   }, [+urlPage]);
+
+  //-------------------------------------------------------------------------------//
 
   return (
     <div style={{ height: 400, width: '95%', margin: '0 auto' }}>

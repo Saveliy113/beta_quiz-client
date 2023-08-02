@@ -82,6 +82,7 @@ const CreatePasswordForm: FC = () => {
         <DotsLoader />
       ) : (
         <CustomButton
+          width="fullWidth"
           innerText="Зарегистрироваться"
           onClick={() => {}}
           rounded
