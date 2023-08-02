@@ -1,12 +1,45 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import TableTemplate from '@/shared/ui/TableTemplate/TableTemplate';
 import { columns } from '../model/tableColumns';
 import { LessonsTableProps } from '../model/types';
 import styles from './LessonsTableBase.module.scss';
+import { useGetLessonsData } from '../api/useGetLessonsData';
 
 const LessonsTable: FC = ({}) => {
+  const {
+    getGroups,
+    getLessons,
+    groupsIsLoading,
+    groupsIsSuccess,
+    lessonsIsLoading,
+    lessonsIsSuccess,
+    lessonsResponse,
+    groupsResponse,
+  } = useGetLessonsData();
+
+  useEffect(() => {
+    getGroups({
+      domain: 'metastudy',
+      teacher: 0,
+    });
+    getLessons({
+      domain: 'metastudy',
+      startDate: '2023-08-01',
+      endDate: '2023-08-01',
+      page: 0,
+      teacher: 0,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (lessonsIsSuccess && groupsIsSuccess) {
+      console.log('GROUPS: ', groupsResponse);
+      console.log('LESSONS: ', lessonsResponse);
+    }
+  }, [lessonsIsSuccess, groupsIsSuccess]);
+
   return (
     <TableTemplate
       columns={columns}

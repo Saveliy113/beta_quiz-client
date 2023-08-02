@@ -25,10 +25,10 @@ export const useGetLessonsData = () => {
     lessonsIsLoading,
     lessonsIsSuccess,
     lessonsResponse,
-    getLessons,
     groupsIsLoading,
     groupsIsSuccess,
     groupsResponse,
     getGroups,
+    getLessons,
   };
 };
