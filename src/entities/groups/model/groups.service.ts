@@ -1,7 +1,7 @@
 import { $axios } from '@/shared/api';
 import { GetGroupsDto } from './types';
 
-class LessonsApi {
+class GroupsApi {
   async getGroups(dto: GetGroupsDto) {
     return $axios.post('/alfa_requests/groups/get_teacher_groups', {
       ...dto,
@@ -10,5 +10,5 @@ class LessonsApi {
   }
 }
 
-const TableService = new LessonsApi();
+const TableService = new GroupsApi();
 export default TableService;
