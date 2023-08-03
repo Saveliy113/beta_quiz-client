@@ -6,6 +6,7 @@ import { columns } from '../model/tableColumns';
 import { LessonsTableProps } from '../model/types';
 import styles from './LessonsTableBase.module.scss';
 import { useGetLessonsData } from '../api/useGetLessonsData';
+import { formatLessonsData } from '../model/formatLessonsData';
 
 const LessonsTable: FC = ({}) => {
   const {
@@ -34,9 +35,10 @@ const LessonsTable: FC = ({}) => {
   }, []);
 
   useEffect(() => {
-    if (lessonsIsSuccess && groupsIsSuccess) {
+    if (lessonsResponse && groupsResponse) {
       console.log('GROUPS: ', groupsResponse);
       console.log('LESSONS: ', lessonsResponse);
+      console.log(formatLessonsData(lessonsResponse.data, groupsResponse.data));
     }
   }, [lessonsIsSuccess, groupsIsSuccess]);
 
