@@ -1,15 +1,19 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import TableTemplate from '@/shared/ui/TableTemplate/TableTemplate';
+import TableTemplate from '@/shared/ui/TableTemplate/ui/TableTemplate';
 import { columns } from '../model/tableColumns';
 import { FormatLessonsResult, Lesson, LessonsTableProps } from '../model/types';
 import styles from './LessonsTableBase.module.scss';
 import { useGetLessonsData } from '../api/useGetLessonsData';
 import { formatLessonsData } from '../model/formatLessonsData';
+import { useSearchParams } from 'next/navigation';
 
 const LessonsTable: FC = ({}) => {
   const [lessonsData, setLessonsData] = useState<FormatLessonsResult>();
+  const searchParams = useSearchParams();
+  const urlPage = searchParams.get('page') || 0;
+
   const {
     getGroups,
     getLessons,
@@ -30,21 +34,13 @@ const LessonsTable: FC = ({}) => {
       domain: 'metastudy',
       startDate: '2023-08-01',
       endDate: '2023-08-01',
-      page: 0,
+      page: +urlPage - 1,
       teacher: 0,
     });
-  }, []);
+  }, [urlPage]);
 
   useEffect(() => {
     if (lessonsResponse && groupsResponse) {
-      console.log('GROUPS: ', groupsResponse);
-      console.log('LESSONS: ', lessonsResponse);
-      const { lessons, totalRows, totalPages } = formatLessonsData(
-        lessonsResponse.data,
-        groupsResponse.data
-      );
-      console.log('TOTAL ROWS: ', totalRows);
-      console.log('TOTAL Pages: ', totalPages);
       setLessonsData(
         formatLessonsData(lessonsResponse.data, groupsResponse.data)
       );

@@ -30,17 +30,29 @@ const TableTemplate: FC<TableTemplateProps> = ({
     page: +urlPage,
     pageSize: 40,
   });
+  const [rowCountState, setRowCountState] = useState(rowsCount);
+
+  useEffect(() => {
+    setRowCountState((prevRowCountState) =>
+      rowsCount !== undefined ? rowsCount : prevRowCountState
+    );
+  }, [rowsCount, setRowCountState]);
 
   const handlePagination = (page: number) => {
+    console.log('PAGE NUMBER: ', page);
     const params = new URLSearchParams(searchParams.toString());
     if (page >= 1) {
       params.set('page', String(page + 1));
       router.push(`${pathname}?${params}`);
-    } else router.push(`${pathname}?${params}`);
+    } else router.push(`${pathname}`);
   };
 
   useEffect(() => {
-    handlePagination(paginationModel.page);
+    console.log();
+  }, []);
+
+  useEffect(() => {
+    paginationModel.page > 0 && handlePagination(paginationModel.page);
   }, [paginationModel]);
 
   // CHANGE PAGE IF PAGE PARAMETER CHANGED IN URL
@@ -54,7 +66,7 @@ const TableTemplate: FC<TableTemplateProps> = ({
     <div style={{ height: 400, width: '95%', margin: '0 auto' }}>
       <DataGrid
         rows={rows}
-        rowCount={rowsCount}
+        rowCount={rowCountState}
         columns={columns}
         initialState={{
           pagination: {
