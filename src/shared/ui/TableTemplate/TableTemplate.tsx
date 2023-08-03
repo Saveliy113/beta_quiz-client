@@ -10,10 +10,17 @@ type TableRowProps = {
 
 interface TableTemplateProps {
   columns: GridColDef[];
-  rows: TableRowProps[];
+  rows: TableRowProps[] | [];
+  rowsCount: number | undefined;
+  isLoading?: boolean;
 }
 
-const TableTemplate: FC<TableTemplateProps> = ({ columns, rows }) => {
+const TableTemplate: FC<TableTemplateProps> = ({
+  columns,
+  rows,
+  isLoading,
+  rowsCount,
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -21,7 +28,7 @@ const TableTemplate: FC<TableTemplateProps> = ({ columns, rows }) => {
 
   const [paginationModel, setPaginationModel] = useState({
     page: +urlPage,
-    pageSize: 100,
+    pageSize: 40,
   });
 
   const handlePagination = (page: number) => {
@@ -47,7 +54,7 @@ const TableTemplate: FC<TableTemplateProps> = ({ columns, rows }) => {
     <div style={{ height: 400, width: '95%', margin: '0 auto' }}>
       <DataGrid
         rows={rows}
-        rowCount={500}
+        rowCount={rowsCount}
         columns={columns}
         initialState={{
           pagination: {
@@ -56,7 +63,7 @@ const TableTemplate: FC<TableTemplateProps> = ({ columns, rows }) => {
         }}
         pageSizeOptions={[]}
         paginationMode="server"
-        paginationModel={{ ...paginationModel, pageSize: 100 }}
+        paginationModel={{ ...paginationModel, pageSize: 40 }}
         onPaginationModelChange={setPaginationModel}
         disableColumnMenu
         disableColumnSelector
@@ -64,6 +71,7 @@ const TableTemplate: FC<TableTemplateProps> = ({ columns, rows }) => {
         disableColumnFilter
         hideFooterSelectedRowCount
         scrollbarSize={0}
+        loading={isLoading}
       />
     </div>
   );

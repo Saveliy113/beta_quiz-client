@@ -1,14 +1,15 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import TableTemplate from '@/shared/ui/TableTemplate/TableTemplate';
 import { columns } from '../model/tableColumns';
-import { LessonsTableProps } from '../model/types';
+import { FormatLessonsResult, Lesson, LessonsTableProps } from '../model/types';
 import styles from './LessonsTableBase.module.scss';
 import { useGetLessonsData } from '../api/useGetLessonsData';
 import { formatLessonsData } from '../model/formatLessonsData';
 
 const LessonsTable: FC = ({}) => {
+  const [lessonsData, setLessonsData] = useState<FormatLessonsResult>();
   const {
     getGroups,
     getLessons,
@@ -38,22 +39,24 @@ const LessonsTable: FC = ({}) => {
     if (lessonsResponse && groupsResponse) {
       console.log('GROUPS: ', groupsResponse);
       console.log('LESSONS: ', lessonsResponse);
-      console.log(formatLessonsData(lessonsResponse.data, groupsResponse.data));
+      const { lessons, totalRows, totalPages } = formatLessonsData(
+        lessonsResponse.data,
+        groupsResponse.data
+      );
+      console.log('TOTAL ROWS: ', totalRows);
+      console.log('TOTAL Pages: ', totalPages);
+      setLessonsData(
+        formatLessonsData(lessonsResponse.data, groupsResponse.data)
+      );
     }
   }, [lessonsIsSuccess, groupsIsSuccess]);
 
   return (
     <TableTemplate
       columns={columns}
-      rows={[
-        {
-          id: 1,
-          date: '01.01.2023',
-          time: '08:00',
-          group: 'ALA_3_KZOY_1',
-          lesson: 'Математика',
-        },
-      ]}
+      rows={lessonsData?.lessons || []}
+      rowsCount={lessonsData?.totalRows}
+      isLoading={lessonsIsLoading || groupsIsLoading}
     />
   );
 };

@@ -55,3 +55,9 @@ export interface AlfaBranchLessons extends AlfaResponse {
 export interface AlfaBranchGroups extends AlfaResponse {
   items: GroupData[];
 }
+
+export type FormatLessonsResult = {
+  lessons: Lesson[];
+  totalRows: number;
+  totalPages: number;
+};
