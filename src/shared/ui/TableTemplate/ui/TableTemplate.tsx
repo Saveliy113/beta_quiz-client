@@ -36,7 +36,10 @@ const TableTemplate: FC<TableTemplateProps> = ({
     if (page >= 1) {
       params.set('page', String(page + 1));
       router.push(`${pathname}?${params}`);
-    } else router.push(`${pathname}`);
+    } else {
+      params.delete('page');
+      router.push(`${pathname}?${params}`);
+    }
   };
 
   // Change pagination model if page param was changed in url

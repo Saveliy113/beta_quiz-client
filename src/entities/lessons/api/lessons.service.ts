@@ -4,10 +4,11 @@ import { GetGroupsDto, GetLessonsDto } from '../model/types';
 class LessonsApi {
   async getLessons(dto: GetLessonsDto) {
     return $axios.post('/alfa_requests/lessons/get_teacher_lessons', {
-      ...dto,
+      domain: dto.domain,
       teacher_id: dto.teacher,
       date_from: dto.startDate,
       date_to: dto.endDate,
+      page: dto.page,
     });
   }
 

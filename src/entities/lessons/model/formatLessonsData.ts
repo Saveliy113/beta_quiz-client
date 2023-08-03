@@ -27,8 +27,9 @@ export const formatLessonsData = (
     lessonsArr = lessonsArr.concat(branch.items);
   });
 
+  //NEED TO FIX TYPES
   return {
-    lessons: lessonsArr.map((lesson: any, id: any) => ({
+    lessons: lessonsArr.map((lesson: any, id: number) => ({
       id: id + 1,
       date: lesson.date,
       time: `${lesson.time_from} — ${lesson.time_to}`,

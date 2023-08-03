@@ -8,11 +8,17 @@ import styles from './LessonsTableBase.module.scss';
 import { useGetLessonsData } from '../api/useGetLessonsData';
 import { formatLessonsData } from '../model/formatLessonsData';
 import { useSearchParams } from 'next/navigation';
+import DateFilter from '@/shared/ui/DateFilter/DateFilter';
+import { formatDate } from '../model/formatDate';
 
 const LessonsTable: FC = ({}) => {
   const [lessonsData, setLessonsData] = useState<FormatLessonsResult>();
   const searchParams = useSearchParams();
   const urlPage = searchParams.get('page') || 0;
+  const fromDate = searchParams.get('from');
+  const toDate = searchParams.get('to');
+  console.log('FROM DATE: ', fromDate);
+  console.log('TO DATE: ', toDate);
 
   const {
     getGroups,
@@ -32,12 +38,12 @@ const LessonsTable: FC = ({}) => {
     });
     getLessons({
       domain: 'metastudy',
-      startDate: '2023-08-01',
-      endDate: '2023-08-01',
-      page: +urlPage - 1,
+      startDate: formatDate(fromDate),
+      endDate: formatDate(toDate),
+      page: +urlPage ? +urlPage - 1 : +urlPage,
       teacher: 0,
     });
-  }, [urlPage]);
+  }, [urlPage, fromDate, toDate]);
 
   useEffect(() => {
     if (lessonsResponse && groupsResponse) {
@@ -48,12 +54,17 @@ const LessonsTable: FC = ({}) => {
   }, [lessonsIsSuccess, groupsIsSuccess]);
 
   return (
-    <TableTemplate
-      columns={columns}
-      rows={lessonsData?.lessons || []}
-      rowsCount={lessonsData?.totalRows}
-      isLoading={lessonsIsLoading || groupsIsLoading}
-    />
+    <>
+      <div style={{ width: '95%', margin: '0 auto', marginBottom: '30px' }}>
+        <DateFilter />
+      </div>
+      <TableTemplate
+        columns={columns}
+        rows={lessonsData?.lessons || []}
+        rowsCount={lessonsData?.totalRows}
+        isLoading={lessonsIsLoading || groupsIsLoading}
+      />
+    </>
   );
 };
 
