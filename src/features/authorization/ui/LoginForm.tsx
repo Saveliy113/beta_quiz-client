@@ -8,22 +8,12 @@ import styles from './LoginForm.module.scss';
 import { loginFormSchema } from '../model/loginFormSchema';
 import InputMask, { Props as InputMaskProps } from 'react-input-mask';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import { useMutation } from '@tanstack/react-query';
 import { LoginFormInputs } from '../model/types';
-import { AxiosError } from 'axios';
-import useNotify from '@/shared/hooks/useNotify';
-import { useRouter } from 'next/navigation';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
-import Cookies from 'js-cookie';
-import { useAppDispatch } from '@/appLayer/appStore';
-import { setAuthed } from '@/entities/user/model/userSlice';
-import { LoginDto } from '@/entities/user/model/types';
-import UserService from '@/entities/user/model/user.service';
+import { useSignIn } from '../api/useSignIn';
 
 const LoginForm: FC = () => {
-  const { notify } = useNotify();
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+  const { isLoading, isSuccess, signIn } = useSignIn();
 
   const {
     register,
@@ -32,26 +22,6 @@ const LoginForm: FC = () => {
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginFormSchema),
     mode: 'onSubmit',
-  });
-
-  const {
-    isLoading,
-    isSuccess,
-    mutate: signIn,
-  } = useMutation(['signIn'], (dto: LoginDto) => UserService.login(dto), {
-    onSuccess: ({ data }) => {
-      Cookies.set('_auth', data.auth_token);
-      dispatch(setAuthed(true));
-      notify({ success: true, message: 'Вход выполнен успешно' });
-
-      router.push('/lessons');
-    },
-    onError: (error: AxiosError<{ message: string }>) => {
-      if (error.response?.data.message) {
-        notify({ error: true, message: error.response.data.message });
-      } else
-        notify({ error: true, message: 'Возникла ошибка при авторизации' });
-    },
   });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
@@ -92,6 +62,7 @@ const LoginForm: FC = () => {
           onClick={() => {}}
           outlined
           rounded
+          width="fullWidth"
           disabled={!!errors.phone || !!errors.password || isSuccess}
         />
       )}

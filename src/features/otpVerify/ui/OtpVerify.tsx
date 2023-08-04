@@ -2,95 +2,38 @@
 
 import CustomOtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
 import Image from 'next/image';
-import React, {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
-import styles from './OtpVerify.module.scss';
+import React, { FC, useEffect, useState } from 'react';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
-import useNotify from '@/shared/hooks/useNotify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatTimer } from '@/shared/lib/formatTimer';
-import { useMutation } from '@tanstack/react-query';
 import { useAppSelector } from '@/appLayer/appStore';
-import { AxiosError } from 'axios';
-import { CheckOtpDto, OtpVerifyProps, SendOtpDto } from '../model/types';
-import OtpService from '../model/otpVerify.service';
+import { OtpVerifyProps } from '../model/types';
 import { useKeyPress } from 'ahooks';
-import { useRouter } from 'next/navigation';
+import { useOtpVerify } from '../api/useOtpVerify';
+import styles from './OtpVerify.module.scss';
+import useNotify from '@/shared/hooks/useNotify';
 
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
   const { notify } = useNotify();
-  const router = useRouter();
   const [timer, setTimer] = useState<number>(59000);
   const [attempt, setAttempt] = useState<number>(0);
-
   const [otp, setOtp] = useState('');
   const clientPhone = useAppSelector((state) => state.user.phone);
 
-  //------------------------------Queries------------------------------//
-
   const {
-    isSuccess: sendOtpIsSuccess,
-    isLoading: sendOtpIsLoading,
-    mutate: sendOtp,
-  } = useMutation(['sendOtp'], (body: SendOtpDto) => OtpService.sendOtp(body), {
-    onSuccess: () => {
-      setAttempt((prev) => prev + 1);
-    },
-    onError: (error: AxiosError<{ message: string }>) => {
-      if (error.response) {
-        notify({ error: true, message: error.response.data.message });
-      } else {
-        notify({ error: true, message: 'Ошибка при отправке кода' });
-      }
-    },
-  });
+    sendOtpIsLoading,
+    sendOtpIsSuccess,
+    sendOtp,
+    checkOtpIsLoading,
+    checkOtpIsSuccess,
+    checkOtp,
+  } = useOtpVerify({ goNext, setAttempt, redirect });
 
-  const {
-    isSuccess: checkOtpIsSuccess,
-    isLoading: checkOtpIsLoading,
-    mutate: checkOtp,
-  } = useMutation(
-    ['checkOtp'],
-    (body: CheckOtpDto) => OtpService.verifyOtp(body),
-    {
-      onSuccess: () => {
-        setTimeout(() => {
-          if (redirect) {
-            router.push(redirect);
-          }
-          goNext(3);
-        }, 1000);
-      },
-      onError: (error: AxiosError<{ message: string }>) => {
-        if (error.response) {
-          notify({ error: true, message: error.response.data.message });
-        } else {
-          notify({ error: true, message: 'Ошибка при проверке кода' });
-        }
-      },
-    }
-  );
-
-  //--------------------------------------------------------------------//
-
-  //------------------------------Handlers------------------------------//
+  //------------------------------HANDLERS---------------------------//
   const sendOtpHandler = () => {
     sendOtp({ phone: '+' + clientPhone.replace(/\D/g, '') });
   };
-
-  useKeyPress('Enter', () => {
-    if (attempt === 0) {
-      sendOtpHandler();
-    } else {
-      checkOtpHandler();
-    }
-  });
 
   const checkOtpHandler = () => {
     checkOtp({ otp: otp, phone: '+' + clientPhone.replace(/\D/g, '') });
@@ -105,8 +48,19 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
     setTimer(300000);
     sendOtpHandler();
   };
-  //--------------------------------------------------------------------//
 
+  // This hook reacts on Enter button. If user haven't sent otp yet it will send otp by pressing enter
+  // After first attempt it will send query to check otp
+  useKeyPress('Enter', () => {
+    if (attempt === 0) {
+      sendOtpHandler();
+    } else {
+      checkOtpHandler();
+    }
+  });
+
+  // This useEffect makes timer work. After successful otp sending it will create interval
+  // which will update timer state every second
   useEffect(() => {
     let timerId: any;
     if (sendOtpIsSuccess) {
@@ -118,10 +72,6 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
 
     return () => clearInterval(timerId);
   }, [sendOtpIsSuccess, timer]);
-
-  //--------------------------------------------------------------------//
-
-  //------------------------------Component------------------------------//
 
   return (
     <div className={styles.otp__container}>
@@ -189,6 +139,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
           onClick={sendOtpHandler}
           rounded
           outlined
+          width="fullWidth"
         />
       )}
 
@@ -226,6 +177,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
               onClick={checkOtpHandler}
               rounded
               outlined
+              width="fullWidth"
               disabled={checkOtpIsLoading || checkOtpIsSuccess}
             />
           )}

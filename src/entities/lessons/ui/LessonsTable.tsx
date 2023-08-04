@@ -3,13 +3,13 @@
 import { FC, useEffect, useState } from 'react';
 import TableTemplate from '@/shared/ui/TableTemplate/ui/TableTemplate';
 import { columns } from '../model/tableColumns';
-import { FormatLessonsResult, Lesson, LessonsTableProps } from '../model/types';
-import styles from './LessonsTableBase.module.scss';
+import { FormatLessonsResult } from '../model/types';
 import { useGetLessonsData } from '../api/useGetLessonsData';
 import { formatLessonsData } from '../model/formatLessonsData';
 import { useSearchParams } from 'next/navigation';
 import DateFilter from '@/shared/ui/DateFilter/DateFilter';
 import { formatDate } from '../model/formatDate';
+import styles from './LessonsTableBase.module.scss';
 
 const LessonsTable: FC = ({}) => {
   const [lessonsData, setLessonsData] = useState<FormatLessonsResult>();
@@ -17,8 +17,6 @@ const LessonsTable: FC = ({}) => {
   const urlPage = searchParams.get('page') || 0;
   const fromDate = searchParams.get('from');
   const toDate = searchParams.get('to');
-  console.log('FROM DATE: ', fromDate);
-  console.log('TO DATE: ', toDate);
 
   const {
     getGroups,

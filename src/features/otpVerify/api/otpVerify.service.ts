@@ -1,5 +1,5 @@
 import { $axios } from '@/shared/api';
-import { CheckOtpDto, SendOtpDto } from './types';
+import { CheckOtpDto, SendOtpDto } from '../model/types';
 
 class otpApi {
   async sendOtp(dto: SendOtpDto) {

@@ -32,7 +32,10 @@ export const formatLessonsData = (
     lessons: lessonsArr.map((lesson: any, id: number) => ({
       id: id + 1,
       date: lesson.date,
-      time: `${lesson.time_from} — ${lesson.time_to}`,
+      time: `${lesson.time_from.slice(11, 19)} — ${lesson.time_to.slice(
+        11,
+        19
+      )}`,
       group:
         groupsArr.find((group: any) => group.id === lesson.group_ids[0])
           ?.name || ' ',

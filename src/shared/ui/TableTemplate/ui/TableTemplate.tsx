@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { DataGrid } from '@mui/x-data-grid';
 import { TableTemplateProps } from '../model/types';
-import styles from './TableTemplate.module.scss';
 import { getUrlPage } from '../model/getUrlPage';
+import styles from './TableTemplate.module.scss';
 
 const TableTemplate: FC<TableTemplateProps> = ({
   columns,
@@ -58,7 +58,7 @@ const TableTemplate: FC<TableTemplateProps> = ({
     <div style={{ height: 400, width: '95%', margin: '0 auto' }}>
       <DataGrid
         rows={rows}
-        rowCount={rowCountState}
+        rowCount={rowCountState || 0}
         columns={columns}
         initialState={{
           pagination: {
