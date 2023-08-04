@@ -1,18 +1,17 @@
 'use client';
 
-import CustomOtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
-import Image from 'next/image';
 import React, { FC, useEffect, useState } from 'react';
+import { useAppSelector } from '@/appLayer/appStore';
+import CustomOtpInput from '@/shared/ui/OtpInput/CustomOtpInput';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
-import { motion, AnimatePresence } from 'framer-motion';
-import { formatTimer } from '@/shared/lib/formatTimer';
-import { useAppSelector } from '@/appLayer/appStore';
 import { OtpVerifyProps } from '../model/types';
 import { useKeyPress } from 'ahooks';
 import { useOtpVerify } from '../api/useOtpVerify';
-import styles from './OtpVerify.module.scss';
 import useNotify from '@/shared/hooks/useNotify';
+import FormResendBlock from '@/shared/ui/FormResendBlock/FormResendBlock';
+import AnimatedShieldIcon from '@/shared/ui/AnimatedShieldIcon/AnimatedShieldIcon';
+import styles from './OtpVerify.module.scss';
 
 const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
   const { notify } = useNotify();
@@ -75,64 +74,7 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
 
   return (
     <div className={styles.otp__container}>
-      <AnimatePresence>
-        {!checkOtpIsSuccess && (
-          <motion.div
-            initial={false}
-            animate="animateState"
-            exit="exitState"
-            transition={{ duration: 0.2 }}
-            variants={{
-              animateState: {
-                opacity: 1,
-                position: 'static',
-              },
-              exitState: {
-                opacity: 0,
-                rotate: 180,
-                position: 'absolute',
-              },
-            }}
-          >
-            <Image
-              src="/icons/shield.svg"
-              alt="Form header icon"
-              style={{ objectFit: 'contain' }}
-              width={100}
-              height={100}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {checkOtpIsSuccess && (
-        <motion.div
-          initial="initialState"
-          animate="animateState"
-          transition={{ duration: 0.55 }}
-          variants={{
-            initialState: {
-              rotate: 180,
-              position: 'absolute',
-              opacity: 0,
-            },
-            animateState: {
-              opacity: 1,
-              rotate: 360,
-              position: 'static',
-            },
-          }}
-        >
-          <Image
-            src="/icons/otp_success.svg"
-            alt="Form header icon"
-            style={{ objectFit: 'contain' }}
-            width={100}
-            height={100}
-          />
-        </motion.div>
-      )}
-
+      <AnimatedShieldIcon success={checkOtpIsSuccess} />
       {!sendOtpIsLoading && !sendOtpIsSuccess && attempt < 1 && (
         <CustomButton
           innerText="Отправить код"
@@ -148,26 +90,11 @@ const OtpVerify: FC<OtpVerifyProps> = ({ goNext, redirect }) => {
       {attempt > 0 && (
         <>
           <CustomOtpInput otp={otp} setOtp={setOtp} />
-
-          {timer === 0 && attempt <= 3 ? (
-            <button onClick={timerButtonHandler} className="buttonLink">
-              Отправить заново
-            </button>
-          ) : (
-            <p
-              className="subtext"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 5,
-              }}
-            >
-              Не пришел код? Отправить заново через{'  '}
-              <span style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                {formatTimer(timer)}
-              </span>
-            </p>
-          )}
+          <FormResendBlock
+            attempt={attempt}
+            timerState={timer}
+            resendButtonHandler={timerButtonHandler}
+          />
 
           {checkOtpIsLoading ? (
             <DotsLoader />

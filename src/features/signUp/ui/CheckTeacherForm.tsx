@@ -52,18 +52,19 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   );
 
   const onSubmit: SubmitHandler<CheckTeacherInputs> = (data, event) => {
-    checkTeacher(
-      {
-        domain: data.domain,
-        phone_number: data.phone,
-      },
-      {
-        onSuccess: () => {
-          dispatch(setClientInfo(data));
-          goNext(2);
-        },
-      }
-    );
+    // checkTeacher(
+    //   {
+    //     domain: data.domain,
+    //     phone_number: data.phone,
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       dispatch(setClientInfo(data));
+    //       goNext(2);
+    //     },
+    //   }
+    // );
+    goNext(2);
   };
 
   return (
@@ -103,6 +104,7 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
             onClick={() => {}}
             rounded
             outlined
+            width="fullWidth"
             disabled={!!errors.domain || !!errors.phone || isSuccess}
           />
         )}

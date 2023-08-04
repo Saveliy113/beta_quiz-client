@@ -3,7 +3,7 @@ import { CheckOtpDto, SendOtpDto, UseOtpVerifyProps } from '../model/types';
 import OtpService from './otpVerify.service';
 import useNotify from '@/shared/hooks/useNotify';
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export const useOtpVerify = ({
   goNext,
