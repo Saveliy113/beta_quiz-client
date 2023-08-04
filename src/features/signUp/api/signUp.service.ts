@@ -1,5 +1,5 @@
 import { $axios } from '@/shared/api';
-import { CheckTeacherDto, CreateTeacherDto } from './types';
+import { CheckTeacherDto, CreateTeacherDto } from '../model/types';
 
 class SignUpApi {
   async checkTeacher(dto: CheckTeacherDto) {

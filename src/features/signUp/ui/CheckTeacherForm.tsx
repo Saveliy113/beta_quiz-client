@@ -10,16 +10,9 @@ import CustomButton from '@/shared/ui/CustomButton/CustomButton';
 import { setClientInfo } from '@/entities/user/model/userSlice';
 import { useAppDispatch } from '@/appLayer/appStore';
 import styles from './CheckTeacherForm.module.scss';
-import toast from 'react-hot-toast';
-import { useMutation } from '@tanstack/react-query';
-import SignUpService from '../model/signUp.service';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
-import {
-  CheckTeacherDto,
-  CheckTeacherFormProps,
-  CheckTeacherInputs,
-} from '../model/types';
-import { AxiosError } from 'axios';
+import { CheckTeacherFormProps, CheckTeacherInputs } from '../model/types';
+import { useSignUp } from '../api/useSignUp';
 
 const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
   const dispatch = useAppDispatch();
@@ -33,38 +26,22 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
     mode: 'onSubmit',
   });
 
-  const {
-    isLoading,
-    isSuccess,
-    mutate: checkTeacher,
-  } = useMutation(
-    ['checkTeacher'],
-    (body: CheckTeacherDto) => SignUpService.checkTeacher(body),
-    {
-      onError: (error: AxiosError<{ message: string }>) => {
-        if (error.response) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error('Ошибка при проверке учителя');
-        }
-      },
-    }
-  );
+  const { checkTeacherIsLoading, checkTeacherIsSuccess, checkTeacher } =
+    useSignUp();
 
   const onSubmit: SubmitHandler<CheckTeacherInputs> = (data, event) => {
-    // checkTeacher(
-    //   {
-    //     domain: data.domain,
-    //     phone_number: data.phone,
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       dispatch(setClientInfo(data));
-    //       goNext(2);
-    //     },
-    //   }
-    // );
-    goNext(2);
+    checkTeacher(
+      {
+        domain: data.domain,
+        phone_number: data.phone,
+      },
+      {
+        onSuccess: () => {
+          dispatch(setClientInfo({ ...data, name: 'Магжан' }));
+          goNext(2);
+        },
+      }
+    );
   };
 
   return (
@@ -96,7 +73,7 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
           }
         </InputMask>
 
-        {isLoading ? (
+        {checkTeacherIsLoading ? (
           <DotsLoader />
         ) : (
           <CustomButton
@@ -105,7 +82,9 @@ const CheckTeacherForm: FC<CheckTeacherFormProps> = ({ goNext }) => {
             rounded
             outlined
             width="fullWidth"
-            disabled={!!errors.domain || !!errors.phone || isSuccess}
+            disabled={
+              !!errors.domain || !!errors.phone || checkTeacherIsSuccess
+            }
           />
         )}
       </>

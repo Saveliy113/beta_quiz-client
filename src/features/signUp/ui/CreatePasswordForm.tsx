@@ -5,22 +5,16 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPasswordFormSchema } from '../model/creastePasswordFromSchema';
-import styles from './CreatePasswordForm.module.scss';
 import CustomButton from '@/shared/ui/CustomButton/CustomButton';
-import SignUpService from '../model/signUp.service';
-import useNotify from '@/shared/hooks/useNotify';
-import { useMutation } from '@tanstack/react-query';
 import { useAppSelector } from '@/appLayer/appStore';
-import { useRouter } from 'next/navigation';
-import { CreatePasswordInputs, CreateTeacherDto } from '../model/types';
-import { AxiosError } from 'axios';
+import { CreatePasswordInputs } from '../model/types';
 import DotsLoader from '@/shared/ui/DotsLoader/sLoader/DotsLoader';
+import { useSignUp } from '../api/useSignUp';
+import styles from './CreatePasswordForm.module.scss';
 
 const CreatePasswordForm: FC = () => {
-  const { notify } = useNotify();
   const domain = useAppSelector((state) => state.user.domain);
   const phone = useAppSelector((state) => state.user.phone);
-  const router = useRouter();
 
   const {
     register,
@@ -31,30 +25,8 @@ const CreatePasswordForm: FC = () => {
     mode: 'onSubmit',
   });
 
-  const {
-    isSuccess,
-    isLoading,
-    mutate: createTeacher,
-  } = useMutation(
-    ['createTeacher'],
-    (body: CreateTeacherDto) => SignUpService.createTeacher(body),
-    {
-      onSuccess: () => {
-        notify({
-          success: true,
-          message: 'Вы успешно зарегистрированы!',
-        });
-        setTimeout(() => router.push('/signin'), 1000);
-      },
-      onError: (error: AxiosError<{ message: string }>) => {
-        if (error.response) {
-          notify({ error: true, message: error.response.data.message });
-        } else {
-          notify({ error: true, message: 'Ошибка при регистрации' });
-        }
-      },
-    }
-  );
+  const { createTeacherIsLoading, createTeacherIsSuccess, createTeacher } =
+    useSignUp();
 
   const onSubmit: SubmitHandler<CreatePasswordInputs> = ({ password }) => {
     createTeacher({ domain, phone, password });
@@ -78,7 +50,7 @@ const CreatePasswordForm: FC = () => {
         label="Повторите пароль"
         {...register('confirmPassword')}
       />
-      {isLoading ? (
+      {createTeacherIsLoading ? (
         <DotsLoader />
       ) : (
         <CustomButton
@@ -87,7 +59,7 @@ const CreatePasswordForm: FC = () => {
           onClick={() => {}}
           rounded
           outlined
-          disabled={isLoading || isSuccess}
+          disabled={createTeacherIsLoading || createTeacherIsSuccess}
         />
       )}
     </form>
