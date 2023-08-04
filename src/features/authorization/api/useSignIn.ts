@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@/appLayer/appStore';
 import { LoginDto } from '@/entities/user/model/types';
-import UserService from '@/entities/user/model/user.service';
+import UserService from '@/entities/user/api/user.service';
 import { setAuthed } from '@/entities/user/model/userSlice';
 import useNotify from '@/shared/hooks/useNotify';
 import { useMutation } from '@tanstack/react-query';

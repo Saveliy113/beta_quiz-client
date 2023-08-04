@@ -1,5 +1,5 @@
 import { $axios } from '@/shared/api';
-import { LoginDto } from './types';
+import { LoginDto } from '../model/types';
 
 class UserApi {
   async login(dto: LoginDto) {

@@ -8,7 +8,7 @@ import { useGetLessonsData } from '../api/useGetLessonsData';
 import { formatLessonsData } from '../model/formatLessonsData';
 import { useSearchParams } from 'next/navigation';
 import DateFilter from '@/shared/ui/DateFilter/DateFilter';
-import { formatDate } from '../model/formatDate';
+import { formatDate } from '../../../shared/lib/formatDate';
 import styles from './LessonsTableBase.module.scss';
 
 const LessonsTable: FC = ({}) => {
