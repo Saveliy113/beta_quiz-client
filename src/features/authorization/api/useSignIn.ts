@@ -6,7 +6,7 @@ import useNotify from '@/shared/hooks/useNotify';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export const useSignIn = () => {
   const dispatch = useAppDispatch();

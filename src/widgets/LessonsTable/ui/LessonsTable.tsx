@@ -56,12 +56,12 @@ const LessonsTable: FC = ({}) => {
       <div style={{ width: '95%', margin: '0 auto', marginBottom: '30px' }}>
         <DateFilter />
       </div>
-      <TableTemplate
+      {/* <TableTemplate
         columns={columns}
         rows={lessonsData?.lessons || []}
         rowsCount={lessonsData?.totalRows}
         isLoading={lessonsIsLoading || groupsIsLoading}
-      />
+      /> */}
     </>
   );
 };

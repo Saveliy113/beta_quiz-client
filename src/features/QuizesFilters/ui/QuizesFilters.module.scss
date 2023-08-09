@@ -1,0 +1,25 @@
+@import '@/shared/colors.scss';
+
+.quiz__filters {
+  width: 95%;
+  margin: 0 auto;
+  padding: 20px 25px;
+  background-color: $pure-white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > .tabs__wrapper {
+    width: 30%;
+    // border: 1px solid red;
+  }
+
+  > .selects__wrapper {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // border: 1px solid blue ;
+  }
+}

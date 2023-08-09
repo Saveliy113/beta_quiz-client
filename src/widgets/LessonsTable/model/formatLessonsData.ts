@@ -15,33 +15,36 @@ export const formatLessonsData = (
   let totalRows: number = 0;
   let totalPages: number = 0;
 
-  groupsResponse.forEach((branch: AlfaBranchGroups) => {
-    groupsArr = groupsArr.concat(branch.items);
-  });
+  console.log('Lessons Response: ', lessonsResponse);
+  console.log('Groups Response: ', groupsResponse);
 
-  lessonsResponse.forEach((branch: AlfaBranchLessons) => {
-    totalRows += branch.total;
-    if (branch.total / branch.count > totalPages) {
-      totalPages = Math.ceil(branch.total / branch.count);
-    }
-    lessonsArr = lessonsArr.concat(branch.items);
-  });
+  // groupsResponse.forEach((branch: AlfaBranchGroups) => {
+  //   groupsArr = groupsArr.concat(branch.items);
+  // });
+
+  // lessonsResponse.forEach((branch: AlfaBranchLessons) => {
+  //   totalRows += branch.total;
+  //   if (branch.total / branch.count > totalPages) {
+  //     totalPages = Math.ceil(branch.total / branch.count);
+  //   }
+  //   lessonsArr = lessonsArr.concat(branch.items);
+  // });
 
   //NEED TO FIX TYPES
-  return {
-    lessons: lessonsArr.map((lesson: any, id: number) => ({
-      id: id + 1,
-      date: lesson.date,
-      time: `${lesson.time_from.slice(11, 19)} — ${lesson.time_to.slice(
-        11,
-        19
-      )}`,
-      group:
-        groupsArr.find((group: any) => group.id === lesson.group_ids[0])
-          ?.name || ' ',
-      lesson: lesson.subject_id,
-    })),
-    totalRows,
-    totalPages,
-  };
+  // return {
+  //   lessons: lessonsArr.map((lesson: any, id: number) => ({
+  //     id: id + 1,
+  //     date: lesson.date,
+  //     time: `${lesson.time_from.slice(11, 19)} — ${lesson.time_to.slice(
+  //       11,
+  //       19
+  //     )}`,
+  //     group:
+  //       groupsArr.find((group: any) => group.id === lesson.group_ids[0])
+  //         ?.name || ' ',
+  //     lesson: lesson.subject_id,
+  //   })),
+  //   totalRows,
+  //   totalPages,
+  // };
 };
